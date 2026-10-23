@@ -1,4 +1,4 @@
-package com.example.app.config;
+package com.UTETra.app.config;
 
 import org.sitemesh.config.ConfigurableSiteMeshFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
