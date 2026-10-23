@@ -10,6 +10,6 @@ public class HomeController {
     @GetMapping({"/", "/home"})
     public String home(Model model) {
         model.addAttribute("message", "Spring Boot + JSP + SiteMesh + Bootstrap is running!");
-        return "home"; // -> /WEB-INF/views/home.jsp
+        return "homepage"; // -> /WEB-INF/views/homepage.jsp
     }
 }
