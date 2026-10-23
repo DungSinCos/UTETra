@@ -1,4 +1,4 @@
-package com.example.app.config;
+package com.UTETra.app.config;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
