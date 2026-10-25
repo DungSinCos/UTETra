@@ -1,68 +1,42 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
-<!DOCTYPE html>
-<html lang="vi">
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<html>
 <head>
     <title>Đăng nhập</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/login.css">
 </head>
 <body>
-<section class="auth-page">
-    <div class="auth-card">
-        <div class="auth-form-wrap">
-            <div class="auth-head">
-                <h1>Đăng nhập</h1>
-                <p>Nhập thông tin tài khoản của bạn để tiếp tục</p>
+    <div class="container py-5">
+        <div class="card auth-card shadow-sm">
+            <div class="card-body p-4">
+                <h1 class="h4 mb-1">Đăng nhập</h1>
+                <p class="text-secondary small mb-4">Chào mừng bạn quay lại UTETra.</p>
+
+                <%-- backend set model "error" khi sai mật khẩu --%>
+                <c:if test="${not empty error}">
+                    <div class="alert alert-danger py-2"><c:out value="${error}"/></div>
+                </c:if>
+
+                <form action="${pageContext.request.contextPath}/login" method="post">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Email hoặc tên đăng nhập</label>
+                        <input type="text" class="form-control" id="username" name="username" required autofocus>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Mật khẩu</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="remember" name="remember">
+                        <label class="form-check-label" for="remember">Ghi nhớ đăng nhập</label>
+                    </div>
+                    <button type="submit" class="btn btn-brand w-100">Đăng nhập</button>
+                </form>
+
+                <p class="text-center small mt-3 mb-0">
+                    Chưa có tài khoản? <a href="${pageContext.request.contextPath}/register">Đăng ký</a>
+                </p>
             </div>
-
-            <form class="auth-form" action="${pageContext.request.contextPath}/login" method="post">
-                <div class="auth-field">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="example@gmail.com" autocomplete="email" required>
-                </div>
-
-                <div class="auth-field">
-                    <label for="password">Mật khẩu</label>
-                    <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password" required>
-                </div>
-
-                <div class="auth-row">
-                    <label class="auth-remember" for="remember">
-                        <input type="checkbox" id="remember" name="remember-me">
-                        <span class="auth-checkmark"></span>
-                        Ghi nhớ đăng nhập
-                    </label>
-                    <a class="auth-link" href="${pageContext.request.contextPath}/forgot-password">Quên mật khẩu?</a>
-                </div>
-
-                <button type="submit" class="auth-submit">Login</button>
-            </form>
-
-            <div class="auth-divider"><span>Hoặc đăng nhập với</span></div>
-
-            <div class="auth-social">
-                <a class="auth-social-btn" href="${pageContext.request.contextPath}/oauth2/authorization/google">
-                    <svg viewBox="0 0 24 24" width="20" height="20">
-                        <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5a5.6 5.6 0 0 1-2.4 3.6v3h3.9c2.2-2.1 3.5-5.1 3.5-8.8z"/>
-                        <path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-2.9l-3.9-3c-1.1.7-2.5 1.2-4.1 1.2-3.1 0-5.8-2.1-6.7-5H1.3v3.1A12 12 0 0 0 12 24z"/>
-                        <path fill="#FBBC05" d="M5.3 14.3a7.2 7.2 0 0 1 0-4.6V6.6h-4a12 12 0 0 0 0 10.8l4-3.1z"/>
-                        <path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4A12 12 0 0 0 1.3 6.6l4 3.1c.9-2.9 3.6-4.9 6.7-4.9z"/>
-                    </svg>
-                    Google
-                </a>
-                <a class="auth-social-btn" href="${pageContext.request.contextPath}/oauth2/authorization/facebook">
-                    <svg viewBox="0 0 24 24" width="20" height="20">
-                        <path fill="#1877F2" d="M24 12a12 12 0 1 0-13.9 11.9v-8.4h-3V12h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9V12h3.4l-.5 3.5h-2.9v8.4A12 12 0 0 0 24 12z"/>
-                    </svg>
-                    Facebook
-                </a>
-            </div>
-
-            <p class="auth-switch">
-                Chưa có tài khoản?
-                <a class="auth-link auth-link--strong" href="${pageContext.request.contextPath}/register">Đăng ký ngay</a>
-            </p>
         </div>
     </div>
-</section>
 </body>
 </html>

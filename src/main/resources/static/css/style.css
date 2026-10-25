@@ -1,0 +1,56 @@
+/* UTETra - style chung (chạy sau Bootstrap) */
+:root {
+    --ute-green: #2e7d5b;
+    --ute-green-dark: #1d5039;
+    --ute-cream: #f4f8f2;
+    --ute-amber: #f0b44c;
+    --bs-link-color: var(--ute-green);
+}
+
+body {
+    font-family: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color: #26312c;
+    background: #fff;
+}
+
+.navbar-brand { font-weight: 700; color: var(--ute-green-dark) !important; letter-spacing: .3px; }
+.navbar .nav-link { color: #3b4a42; }
+.navbar .nav-link:hover, .navbar .nav-link.active { color: var(--ute-green); font-weight: 600; }
+
+.btn-brand { background: var(--ute-green); border-color: var(--ute-green); color: #fff; }
+.btn-brand:hover, .btn-brand:focus { background: var(--ute-green-dark); border-color: var(--ute-green-dark); color: #fff; }
+.btn-outline-brand { border-color: var(--ute-green); color: var(--ute-green); }
+.btn-outline-brand:hover { background: var(--ute-green); color: #fff; }
+
+/* hero */
+.hero { background: var(--ute-cream); }
+.hero h1 { font-weight: 700; color: var(--ute-green-dark); line-height: 1.2; }
+.hero-cup {
+    aspect-ratio: 1 / 1;
+    max-width: 360px;
+    margin-inline: auto;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #fff 0%, #dcebdc 55%, #bcd8c3 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8rem;
+}
+
+/* card sản phẩm */
+.product-card { border: 1px solid #e3ebe5; transition: box-shadow .15s; }
+.product-card:hover { box-shadow: 0 6px 18px rgba(30, 80, 57, .12); }
+.product-thumb {
+    height: 160px;
+    background: var(--ute-cream);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 4rem;
+}
+.product-price { color: var(--ute-green-dark); font-weight: 700; }
+
+.category-pills .btn { border-radius: 50rem; }
+
+/* form login / register */
+.auth-card { max-width: 440px; margin-inline: auto; border: 1px solid #e3ebe5; }
+
+.site-footer { background: var(--ute-green-dark); color: #d6e4db; }
+.site-footer a { color: #fff; text-decoration: none; }
+.site-footer a:hover { text-decoration: underline; }
