@@ -1,4 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -13,8 +15,8 @@
             <h1 class="hero-title">Trà sữa tươi <span>pha mỗi ngày</span> cho ngày dài thêm ngọt ngào</h1>
             <p class="hero-desc">Lá trà nguyên chất, sữa tươi thanh trùng cùng trân châu nấu thủ công mỗi sáng. UTETra mang đến ly trà sữa đậm vị, ít ngọt và luôn tươi mới.</p>
             <div class="hero-actions">
-                <a class="hero-btn hero-btn--primary" href="${pageContext.request.contextPath}/menu">Đặt ngay</a>
-                <a class="hero-btn hero-btn--outline" href="${pageContext.request.contextPath}/menu">Xem thực đơn</a>
+                <a class="hero-btn hero-btn--primary" href="${pageContext.request.contextPath}/products">Đặt ngay</a>
+                <a class="hero-btn hero-btn--outline" href="${pageContext.request.contextPath}/products">Xem thực đơn</a>
             </div>
             <ul class="hero-stats">
                 <li><strong>20+</strong><span>Cửa hàng</span></li>
@@ -46,68 +48,23 @@
         </div>
 
         <div class="product-grid">
-            <article class="product-item">
-                <div class="product-thumb">
-                    <span class="product-badge">Bán chạy</span>
-                    <img src="https://images.unsplash.com/photo-1525385133512-2f3bdd039054?auto=format&fit=crop&w=600&q=80" alt="Trà Sữa Trân Châu Đường Đen">
-                </div>
-                <div class="product-body">
-                    <h3 class="product-name">Trà Sữa Trân Châu Đường Đen</h3>
-                    <p class="product-desc">Sữa tươi béo ngậy hòa quyện cùng trân châu đường đen dẻo thơm.</p>
-                    <div class="product-footer">
-                        <span class="product-price">45.000đ</span>
-                        <a class="product-add" href="${pageContext.request.contextPath}/menu" aria-label="Thêm vào giỏ">+</a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="product-item">
-                <div class="product-thumb">
-                    <span class="product-badge product-badge--new">Mới</span>
-                    <img src="https://images.unsplash.com/photo-1541696490-8744a5dc0228?auto=format&fit=crop&w=600&q=80" alt="Trà Oolong Kem Cheese">
-                </div>
-                <div class="product-body">
-                    <h3 class="product-name">Trà Oolong Kem Cheese</h3>
-                    <p class="product-desc">Oolong rang thơm nồng phủ lớp kem cheese mặn mịn béo.</p>
-                    <div class="product-footer">
-                        <span class="product-price">49.000đ</span>
-                        <a class="product-add" href="${pageContext.request.contextPath}/menu" aria-label="Thêm vào giỏ">+</a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="product-item">
-                <div class="product-thumb">
-                    <img src="https://images.unsplash.com/photo-1515823064-d6e0c04616a7?auto=format&fit=crop&w=600&q=80" alt="Matcha Latte Đậu Đỏ">
-                </div>
-                <div class="product-body">
-                    <h3 class="product-name">Matcha Latte Đậu Đỏ</h3>
-                    <p class="product-desc">Matcha Uji Nhật Bản kết hợp đậu đỏ ninh mềm ngọt dịu.</p>
-                    <div class="product-footer">
-                        <span class="product-price">52.000đ</span>
-                        <a class="product-add" href="${pageContext.request.contextPath}/menu" aria-label="Thêm vào giỏ">+</a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="product-item">
-                <div class="product-thumb">
-                    <span class="product-badge">Bán chạy</span>
-                    <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=600&q=80" alt="Trà Đào Cam Sả">
-                </div>
-                <div class="product-body">
-                    <h3 class="product-name">Trà Đào Cam Sả</h3>
-                    <p class="product-desc">Trà đen thanh mát cùng đào miếng, cam tươi và sả thơm.</p>
-                    <div class="product-footer">
-                        <span class="product-price">42.000đ</span>
-                        <a class="product-add" href="${pageContext.request.contextPath}/menu" aria-label="Thêm vào giỏ">+</a>
-                    </div>
-                </div>
-            </article>
+            <fmt:setLocale value="vi_VN"/>
+            <c:forEach var="p" items="${featuredProducts}">
+                <fmt:formatNumber value="${p.basePrice}" type="number" maxFractionDigits="0" var="formattedPrice"/>
+                <jsp:include page="/WEB-INF/views/components/product-card.jsp">
+                    <jsp:param name="id" value="${p.id}"/>
+                    <jsp:param name="name" value="${p.name}"/>
+                    <jsp:param name="desc" value="${p.description}"/>
+                    <jsp:param name="price" value="${formattedPrice}đ"/>
+                    <jsp:param name="image" value="${p.imageUrl}"/>
+                    <jsp:param name="badge" value="${p.featured ? 'Nổi bật' : ''}"/>
+                    <jsp:param name="category" value="${p.categoryId}"/>
+                </jsp:include>
+            </c:forEach>
         </div>
 
         <div class="featured-more">
-            <a class="hero-btn hero-btn--outline" href="${pageContext.request.contextPath}/menu">Xem toàn bộ thực đơn</a>
+            <a class="hero-btn hero-btn--outline" href="${pageContext.request.contextPath}/products">Xem toàn bộ thực đơn</a>
         </div>
     </div>
 </section>

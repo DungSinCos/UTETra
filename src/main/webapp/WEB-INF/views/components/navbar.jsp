@@ -16,6 +16,7 @@
                 <a class="nav-item" href="${pageContext.request.contextPath}/products" data-path="/products">Thực Đơn</a>
                 <a class="nav-item" href="${pageContext.request.contextPath}/about" data-path="/about">Về UTETra</a>
                 <a class="nav-item" href="${pageContext.request.contextPath}/support" data-path="/support">Hỗ Trợ</a>
+                <a class="nav-item" href="${pageContext.request.contextPath}/cart" data-path="/cart">Giỏ hàng</a>
                 <c:if test="${currentUserRole == 'ADMIN' || currentUserRole == 'MANAGER'}">
                     <a class="nav-item" href="${pageContext.request.contextPath}/admin/dashboard" data-path="/admin">Quản trị</a>
                 </c:if>
