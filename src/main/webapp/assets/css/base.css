@@ -1,0 +1,57 @@
+:root {
+    --ut-primary: #7b4a2b;
+    --ut-primary-dark: #5a3520;
+    --ut-accent: #e9a15b;
+    --ut-accent-soft: #fbe6cf;
+    --ut-cream: #fff8f0;
+    --ut-text: #2d1e15;
+    --ut-muted: #7d6a5d;
+    --ut-white: #ffffff;
+    --ut-border: #f0e2d3;
+    --ut-radius: 16px;
+    --ut-shadow: 0 10px 30px rgba(123, 74, 43, 0.12);
+    --ut-header-h: 72px;
+    --ut-font: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: var(--ut-font);
+    color: var(--ut-text);
+    background-color: var(--ut-cream);
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+.site-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.site-main {
+    flex: 1;
+}

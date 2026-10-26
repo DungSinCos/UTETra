@@ -1,4 +1,4 @@
-package com.example.app.config;
+package com.UTETra.app.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

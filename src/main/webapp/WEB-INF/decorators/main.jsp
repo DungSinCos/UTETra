@@ -1,28 +1,29 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>My App - <sitemesh:write property="title"/></title>
+    <title>UTETra - <sitemesh:write property="title"/></title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/base.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/navbar.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/footer.css">
     <sitemesh:write property="head"/>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="${pageContext.request.contextPath}/">My App</a>
-        </div>
-    </nav>
+    <jsp:include page="/WEB-INF/views/components/navbar.jsp"/>
 
-    <main class="container py-4">
+    <main class="site-main">
         <sitemesh:write property="body"/>
     </main>
 
-    <footer class="container text-center text-muted py-3 border-top">
-        &copy; 2026 My App
-    </footer>
+    <jsp:include page="/WEB-INF/views/components/footer.jsp"/>
 
     <script src="${pageContext.request.contextPath}/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    <script src="${pageContext.request.contextPath}/assets/js/navbar.js"></script>
 </body>
 </html>
