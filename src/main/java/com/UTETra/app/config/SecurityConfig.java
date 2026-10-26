@@ -1,7 +1,16 @@
 package com.UTETra.app.config;
 
+import com.UTETra.app.repository.UserRepository;
+import com.UTETra.app.security.JwtAuthenticationFilter;
+import com.UTETra.app.security.JwtService;
+import jakarta.servlet.DispatcherType;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseCookie;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -9,22 +18,78 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
- * Stateless security skeleton for JWT.
- * Currently permits everything so home.jsp is reachable; add your JWT filter here later.
+ * Stateless JWT security configuration with role-based authorization for /admin/**.
  */
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http,
+                                           JwtService jwtService,
+                                           UserRepository userRepository) throws Exception {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .headers(h -> h.frameOptions(f -> f.sameOrigin()))
-            .authorizeHttpRequests(a -> a.anyRequest().permitAll());
+            .authorizeHttpRequests(a -> a
+                // Allow internal Servlet FORWARD dispatches to /WEB-INF/views/*.jsp after controller authorization
+                .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
+                // Only ADMIN and MANAGER roles can access /admin and /admin/** (blocks STAFF, CUSTOMER, and guests)
+                .requestMatchers("/admin", "/admin/**").hasAnyRole("ADMIN", "MANAGER")
+                // All other public pages and static assets remain accessible
+                .anyRequest().permitAll()
+            )
+            .exceptionHandling(e -> e
+                // Unauthenticated user (not logged in) trying to access /admin/** -> redirect to /login
+                .authenticationEntryPoint((request, response, authException) -> {
+                    String accept = request.getHeader(HttpHeaders.ACCEPT);
+                    if (accept != null && accept.contains(MediaType.APPLICATION_JSON_VALUE)) {
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                        response.setCharacterEncoding("UTF-8");
+                        response.getWriter().write("{\"success\":false,\"message\":\"Vui lòng đăng nhập để tiếp tục\"}");
+                    } else {
+                        response.sendRedirect(request.getContextPath() + "/login");
+                    }
+                })
+                // Authenticated user without ADMIN/MANAGER role (e.g. CUSTOMER or STAFF) -> 403 Forbidden
+                .accessDeniedHandler((request, response, accessDeniedException) -> {
+                    String accept = request.getHeader(HttpHeaders.ACCEPT);
+                    if (accept != null && accept.contains(MediaType.APPLICATION_JSON_VALUE)) {
+                        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                        response.setCharacterEncoding("UTF-8");
+                        response.getWriter().write("{\"success\":false,\"message\":\"Bạn không có quyền truy cập trang này\"}");
+                    } else {
+                        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                        request.getRequestDispatcher("/WEB-INF/views/error/403.jsp").forward(request, response);
+                    }
+                })
+            )
+            .formLogin(AbstractHttpConfigurer::disable)
+            .httpBasic(AbstractHttpConfigurer::disable)
+            .logout(l -> l
+                .logoutUrl("/logout")
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .deleteCookies(JwtAuthenticationFilter.COOKIE_NAME)
+                .addLogoutHandler((request, response, auth) -> {
+                    ResponseCookie expired = ResponseCookie.from(JwtAuthenticationFilter.COOKIE_NAME, "")
+                            .httpOnly(true)
+                            .secure(request.isSecure())
+                            .sameSite("Lax")
+                            .path("/")
+                            .maxAge(0)
+                            .build();
+                    response.addHeader(HttpHeaders.SET_COOKIE, expired.toString());
+                })
+                .logoutSuccessUrl("/login"))
+            .addFilterBefore(new JwtAuthenticationFilter(jwtService, userRepository), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

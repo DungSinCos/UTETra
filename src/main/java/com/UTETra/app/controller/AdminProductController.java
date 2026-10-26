@@ -3,6 +3,7 @@ package com.UTETra.app.controller;
 import com.UTETra.app.entity.Product;
 import com.UTETra.app.exception.FileStorageException;
 import com.UTETra.app.service.ProductService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +18,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 /**
  * Product management for admins (list, create, edit, show/hide).
  * Products are hidden rather than deleted so past orders keep a valid reference.
- * See the TODO in AdminController about protecting /admin/**.
+ * Restricted to ADMIN and MANAGER roles via both SecurityConfig and @PreAuthorize.
  */
 @Controller
 @RequestMapping("/admin/products")
+@PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
 public class AdminProductController {
 
     private static final String FORM_VIEW = "admin/products/form";
