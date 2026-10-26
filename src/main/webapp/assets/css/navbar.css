@@ -78,6 +78,12 @@
     gap: 12px;
 }
 
+.nav-user-greeting {
+    font-size: 0.95rem;
+    color: var(--ut-text);
+    white-space: nowrap;
+}
+
 .action-btn {
     display: inline-flex;
     align-items: center;

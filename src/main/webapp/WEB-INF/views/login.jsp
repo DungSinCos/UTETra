@@ -14,7 +14,7 @@
                 <p>Nhập thông tin tài khoản của bạn để tiếp tục</p>
             </div>
 
-            <form class="auth-form" action="${pageContext.request.contextPath}/login" method="post">
+            <form id="loginForm" class="auth-form" action="${pageContext.request.contextPath}/login" method="post">
                 <div class="auth-field">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" placeholder="example@gmail.com" autocomplete="email" required>
@@ -64,5 +64,23 @@
         </div>
     </div>
 </section>
+
+<!-- Login error pop-up -->
+<div class="modal fade" id="authErrorModal" tabindex="-1" aria-labelledby="authErrorTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content auth-modal">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="authErrorTitle">Đăng nhập thất bại</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            <div class="modal-body" id="authErrorMessage">Email hoặc mật khẩu không đúng</div>
+            <div class="modal-footer border-0">
+                <button type="button" class="auth-submit auth-modal-btn" data-bs-dismiss="modal">Thử lại</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="${pageContext.request.contextPath}/assets/js/login.js"></script>
 </body>
 </html>
