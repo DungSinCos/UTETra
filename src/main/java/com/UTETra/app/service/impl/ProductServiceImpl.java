@@ -32,19 +32,19 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(readOnly = true)
     public List<Product> findActive() {
-        return productRepository.findByActiveTrueOrderByNameAsc();
+        return productRepository.findByActiveTrueOrderByIdAsc();
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Product> findActiveByCategory(Long categoryId) {
-        return productRepository.findByActiveTrueAndCategoryIdOrderByNameAsc(categoryId);
+        return productRepository.findByActiveTrueAndCategoryIdOrderByIdAsc(categoryId);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Product> findFeatured() {
-        return productRepository.findByActiveTrueAndFeaturedTrueOrderByNameAsc();
+        return productRepository.findByActiveTrueAndFeaturedTrueOrderByIdAsc();
     }
 
     @Override

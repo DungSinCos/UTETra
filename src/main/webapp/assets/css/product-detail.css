@@ -141,6 +141,66 @@ body:has(.product-detail-page) .site-footer {
     box-shadow: 0 6px 16px rgba(123, 74, 43, 0.25);
 }
 
+/* Branch Selection Buttons */
+.detail-branch-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 4px;
+}
+
+.detail-branch-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ut-text);
+}
+
+.detail-branch-boxes {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+}
+
+.branch-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px 18px;
+    font-family: var(--ut-font), sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ut-text);
+    background-color: var(--ut-white);
+    border: 2px solid var(--ut-border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.branch-box:hover:not(:disabled) {
+    border-color: var(--ut-accent);
+    color: var(--ut-primary);
+    background-color: var(--ut-cream);
+}
+
+.branch-box.is-selected {
+    color: var(--ut-white);
+    background-color: var(--ut-primary);
+    border-color: var(--ut-primary);
+    box-shadow: 0 6px 16px rgba(123, 74, 43, 0.25);
+}
+
+.branch-box:disabled,
+.branch-box.is-unavailable {
+    opacity: 0.45;
+    color: var(--ut-muted);
+    background-color: #f2ece6;
+    border-color: var(--ut-border);
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
 /* Two Action Buttons: Thêm vào giỏ & Mua ngay */
 .detail-actions {
     display: flex;

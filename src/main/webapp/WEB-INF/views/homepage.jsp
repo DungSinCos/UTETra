@@ -1,4 +1,6 @@
-    <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -46,45 +48,19 @@
         </div>
 
         <div class="product-grid">
-            <jsp:include page="/WEB-INF/views/components/product-card.jsp">
-                <jsp:param name="id" value="1"/>
-                <jsp:param name="name" value="Trà Sữa Trân Châu Đường Đen"/>
-                <jsp:param name="desc" value="Sữa tươi béo ngậy hòa quyện cùng trân châu đường đen dẻo thơm."/>
-                <jsp:param name="price" value="45.000đ"/>
-                <jsp:param name="image" value="https://images.unsplash.com/photo-1525385133512-2f3bdd039054?auto=format&fit=crop&w=600&q=80"/>
-                <jsp:param name="badge" value="Bán chạy"/>
-                <jsp:param name="category" value="tra-sua"/>
-            </jsp:include>
-
-            <jsp:include page="/WEB-INF/views/components/product-card.jsp">
-                <jsp:param name="id" value="2"/>
-                <jsp:param name="name" value="Trà Oolong Kem Cheese"/>
-                <jsp:param name="desc" value="Oolong rang thơm nồng phủ lớp kem cheese mặn mịn béo."/>
-                <jsp:param name="price" value="49.000đ"/>
-                <jsp:param name="image" value="https://images.unsplash.com/photo-1541696490-8744a5dc0228?auto=format&fit=crop&w=600&q=80"/>
-                <jsp:param name="badge" value="Mới"/>
-                <jsp:param name="badgeClass" value="product-badge--new"/>
-                <jsp:param name="category" value="kem-cheese"/>
-            </jsp:include>
-
-            <jsp:include page="/WEB-INF/views/components/product-card.jsp">
-                <jsp:param name="id" value="3"/>
-                <jsp:param name="name" value="Matcha Latte Đậu Đỏ"/>
-                <jsp:param name="desc" value="Matcha Uji Nhật Bản kết hợp đậu đỏ ninh mềm ngọt dịu."/>
-                <jsp:param name="price" value="52.000đ"/>
-                <jsp:param name="image" value="https://images.unsplash.com/photo-1515823064-d6e0c04616a7?auto=format&fit=crop&w=600&q=80"/>
-                <jsp:param name="category" value="matcha-latte"/>
-            </jsp:include>
-
-            <jsp:include page="/WEB-INF/views/components/product-card.jsp">
-                <jsp:param name="id" value="4"/>
-                <jsp:param name="name" value="Trà Đào Cam Sả"/>
-                <jsp:param name="desc" value="Trà đen thanh mát cùng đào miếng, cam tươi và sả thơm."/>
-                <jsp:param name="price" value="42.000đ"/>
-                <jsp:param name="image" value="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=600&q=80"/>
-                <jsp:param name="badge" value="Bán chạy"/>
-                <jsp:param name="category" value="tra-trai-cay"/>
-            </jsp:include>
+            <fmt:setLocale value="vi_VN"/>
+            <c:forEach var="p" items="${featuredProducts}">
+                <fmt:formatNumber value="${p.basePrice}" type="number" maxFractionDigits="0" var="formattedPrice"/>
+                <jsp:include page="/WEB-INF/views/components/product-card.jsp">
+                    <jsp:param name="id" value="${p.id}"/>
+                    <jsp:param name="name" value="${p.name}"/>
+                    <jsp:param name="desc" value="${p.description}"/>
+                    <jsp:param name="price" value="${formattedPrice}đ"/>
+                    <jsp:param name="image" value="${p.imageUrl}"/>
+                    <jsp:param name="badge" value="${p.featured ? 'Nổi bật' : ''}"/>
+                    <jsp:param name="category" value="${p.categoryId}"/>
+                </jsp:include>
+            </c:forEach>
         </div>
 
         <div class="featured-more">
