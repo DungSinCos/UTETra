@@ -30,8 +30,14 @@ public class AdminController {
 
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
-        model.addAttribute("activeProducts", productService.countActive());
-        // TODO: orders today, revenue, new users... add attributes as those modules appear
+        long total = productService.findAll().size();
+        long active = productService.countActive();
+        model.addAttribute("totalProducts", total);
+        model.addAttribute("activeProducts", active);
+        model.addAttribute("hiddenProducts", total - active);
+        model.addAttribute("featuredProducts", productService.findFeatured().size());
+        // Only real data is shown. Orders, revenue and users are added here (and as a card in
+        // dashboard.jsp) when those modules exist; no placeholder numbers in the meantime.
         return "admin/dashboard"; // /WEB-INF/views/admin/dashboard.jsp
     }
 }
