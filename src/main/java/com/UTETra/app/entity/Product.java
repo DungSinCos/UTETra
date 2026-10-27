@@ -43,6 +43,10 @@ public class Product {
     @Column(name = "image_url", length = 500)
     private String imageUrl;
 
+    /** Cloudinary public id of the image above; null when the image is not hosted on our Cloudinary. */
+    @Column(name = "image_public_id", length = 255)
+    private String imagePublicId;
+
     @Column(name = "base_price", nullable = false, precision = 12, scale = 2)
     private BigDecimal basePrice = BigDecimal.ZERO;
 
@@ -79,6 +83,9 @@ public class Product {
 
     public String getImageUrl() { return imageUrl; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+
+    public String getImagePublicId() { return imagePublicId; }
+    public void setImagePublicId(String imagePublicId) { this.imagePublicId = imagePublicId; }
 
     public BigDecimal getBasePrice() { return basePrice; }
     public void setBasePrice(BigDecimal basePrice) { this.basePrice = basePrice; }
