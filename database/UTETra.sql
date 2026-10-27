@@ -88,6 +88,7 @@ CREATE TABLE products (
     slug            VARCHAR(180)   NOT NULL UNIQUE,
     description     TEXT,
     image_url       VARCHAR(500),
+    image_public_id VARCHAR(255),   -- Cloudinary public id; NULL for images not hosted on our Cloudinary (e.g. seed data)
     base_price      DECIMAL(12, 2) NOT NULL CHECK (base_price >= 0),
     is_featured     BOOLEAN        NOT NULL DEFAULT FALSE,
     is_active       BOOLEAN        NOT NULL DEFAULT TRUE,
