@@ -6,6 +6,7 @@ import com.UTETra.app.exception.ResourceNotFoundException;
 import com.UTETra.app.repository.ProductRepository;
 import com.UTETra.app.service.CloudinaryService;
 import com.UTETra.app.service.ProductService;
+import com.UTETra.app.util.SlugUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -15,9 +16,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
-import java.text.Normalizer;
 import java.util.List;
-import java.util.Locale;
 
 @Service
 @Transactional
@@ -96,7 +95,7 @@ public class ProductServiceImpl implements ProductService {
             throw new IllegalArgumentException("SKU đã tồn tại: " + product.getSku());
         }
 
-        String slug = isBlank(product.getSlug()) ? slugify(product.getName()) : slugify(product.getSlug());
+        String slug = isBlank(product.getSlug()) ? SlugUtil.slugify(product.getName()) : SlugUtil.slugify(product.getSlug());
         if (productRepository.existsBySlug(slug)) {
             throw new IllegalArgumentException("Slug đã tồn tại: " + slug);
         }
@@ -207,14 +206,4 @@ public class ProductServiceImpl implements ProductService {
         return s == null || s.isBlank();
     }
 
-    /** "Trà sữa Trân Châu" -> "tra-sua-tran-chau" */
-    static String slugify(String input) {
-        String s = Normalizer.normalize(input.trim(), Normalizer.Form.NFD)
-                .replaceAll("\\p{M}", "")
-                .replace('đ', 'd').replace('Đ', 'D')
-                .toLowerCase(Locale.ROOT)
-                .replaceAll("[^a-z0-9]+", "-")
-                .replaceAll("^-+|-+$", "");
-        return s.isEmpty() ? "san-pham" : s;
-    }
 }
