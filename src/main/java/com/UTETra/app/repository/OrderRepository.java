@@ -15,6 +15,8 @@ import java.util.Optional;
 
 public interface OrderRepository extends JpaRepository<CustomerOrder, Long>, JpaSpecificationExecutor<CustomerOrder> {
 
+    Page<CustomerOrder> findByUser_IdOrderByCreatedAtDesc(Long userId, Pageable pageable);
+
     @Override
     @EntityGraph(attributePaths = {"user", "branch"})
     Page<CustomerOrder> findAll(org.springframework.data.jpa.domain.Specification<CustomerOrder> spec,
