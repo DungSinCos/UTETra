@@ -39,6 +39,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(a -> a
                 // Allow internal Servlet FORWARD dispatches to /WEB-INF/views/*.jsp after controller authorization
                 .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
+                .requestMatchers("/account/**").authenticated()
                 // Only ADMIN and MANAGER roles can access /admin and /admin/** (blocks STAFF, CUSTOMER, and guests)
                 .requestMatchers("/admin", "/admin/**").hasAnyRole("ADMIN", "MANAGER")
                 // All other public pages and static assets remain accessible
