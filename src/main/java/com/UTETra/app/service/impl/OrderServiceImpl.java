@@ -78,6 +78,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(readOnly = true)
+    public Page<CustomerOrder> findForUser(Long userId, Pageable pageable) {
+        return orderRepository.findByUser_IdOrderByCreatedAtDesc(userId, pageable);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public AdminOrderDetail getDetail(Long id) {
         CustomerOrder order = orderRepository.findWithCustomerAndBranchById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order", id));

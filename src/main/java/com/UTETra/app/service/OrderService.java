@@ -16,6 +16,8 @@ public interface OrderService {
                                LocalDate to,
                                Pageable pageable);
 
+    Page<CustomerOrder> findForUser(Long userId, Pageable pageable);
+
     AdminOrderDetail getDetail(Long id);
 
     void updateStatus(Long id, CustomerOrder.OrderStatus targetStatus);

@@ -25,6 +25,7 @@
             <div class="nav-actions">
                 <c:choose>
                     <c:when test="${not empty currentUser}">
+                        <a class="action-btn action-btn--ghost" href="${pageContext.request.contextPath}/account/profile">Tài khoản</a>
                         <span class="nav-user-greeting">
                             Xin chào, <strong><c:out value="${currentUserName}"/></strong>
                         </span>

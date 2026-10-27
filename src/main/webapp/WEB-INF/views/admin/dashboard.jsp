@@ -133,6 +133,16 @@
                 </div>
             </a>
         </div>
+        <c:if test="${currentUserRole == 'ADMIN'}">
+            <div class="col-md-6 col-lg-4">
+                <a class="card shadow-sm h-100 text-decoration-none" href="${pageContext.request.contextPath}/admin/users">
+                    <div class="card-body">
+                        <div class="fw-semibold">Quản lý người dùng</div>
+                        <div class="text-muted small">Tìm tài khoản, xem thông tin và điều chỉnh quyền truy cập.</div>
+                    </div>
+                </a>
+            </div>
+        </c:if>
         <div class="col-md-6 col-lg-4">
             <a class="card shadow-sm h-100 text-decoration-none" href="${pageContext.request.contextPath}/products">
                 <div class="card-body">

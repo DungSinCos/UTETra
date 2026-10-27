@@ -13,9 +13,19 @@ import java.time.LocalDateTime;
 @Table(name = "users")
 public class User {
 
-    public enum Role { CUSTOMER, STAFF, MANAGER, ADMIN }
+    public enum Role {
+        CUSTOMER("Khách hàng"), STAFF("Nhân viên"), MANAGER("Quản lý"), ADMIN("Quản trị viên");
+        private final String label;
+        Role(String label) { this.label = label; }
+        public String getLabel() { return label; }
+    }
 
-    public enum Status { ACTIVE, LOCKED, INACTIVE }
+    public enum Status {
+        ACTIVE("Đang hoạt động"), LOCKED("Đã khóa"), INACTIVE("Ngừng hoạt động");
+        private final String label;
+        Status(String label) { this.label = label; }
+        public String getLabel() { return label; }
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
