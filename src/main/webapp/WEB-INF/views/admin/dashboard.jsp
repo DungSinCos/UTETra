@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -55,6 +56,49 @@
         </div>
     </div>
 
+    <div class="d-flex flex-wrap justify-content-between align-items-end gap-2 mb-3">
+        <h2 class="h5 mb-0">Đơn hàng</h2>
+        <form class="d-flex flex-wrap align-items-end gap-2" method="get"
+              action="${pageContext.request.contextPath}/admin/dashboard">
+            <div>
+                <label class="form-label small mb-1" for="from">Từ ngày</label>
+                <input class="form-control form-control-sm" type="date" id="from" name="from" value="${from}" required>
+            </div>
+            <div>
+                <label class="form-label small mb-1" for="to">Đến ngày</label>
+                <input class="form-control form-control-sm" type="date" id="to" name="to" value="${to}" required>
+            </div>
+            <button class="btn btn-sm btn-outline-primary" type="submit">Lọc</button>
+        </form>
+    </div>
+    <c:if test="${not empty dateError}"><div class="alert alert-danger"><c:out value="${dateError}"/></div></c:if>
+    <div class="row g-3 mb-5">
+        <div class="col-6 col-lg-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted small">Đơn trong khoảng thời gian</div>
+                    <div class="display-6"><c:out value="${orderSummary.totalOrders}"/></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-4">
+            <div class="card shadow-sm h-100 border-warning">
+                <div class="card-body">
+                    <div class="text-muted small">Đơn đang chờ</div>
+                    <div class="display-6 text-warning"><c:out value="${orderSummary.pendingOrders}"/></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-4">
+            <div class="card shadow-sm h-100 border-success">
+                <div class="card-body">
+                    <div class="text-muted small">Doanh thu đã thanh toán</div>
+                    <div class="display-6 text-success"><fmt:formatNumber value="${orderSummary.paidRevenue}" type="number" maxFractionDigits="0"/> đ</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <h2 class="h5 mb-3">Truy cập nhanh</h2>
     <div class="row g-3">
         <div class="col-md-6 col-lg-4">
@@ -78,6 +122,14 @@
                 <div class="card-body">
                     <div class="fw-semibold">Quản lý danh mục</div>
                     <div class="text-muted small">Thêm, sửa, sắp xếp và ẩn/hiện nhóm sản phẩm.</div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <a class="card shadow-sm h-100 text-decoration-none" href="${pageContext.request.contextPath}/admin/orders">
+                <div class="card-body">
+                    <div class="fw-semibold">Quản lý đơn hàng</div>
+                    <div class="text-muted small">Tra cứu đơn, xem chi tiết và cập nhật tiến độ xử lý.</div>
                 </div>
             </a>
         </div>
