@@ -74,6 +74,14 @@
             </a>
         </div>
         <div class="col-md-6 col-lg-4">
+            <a class="card shadow-sm h-100 text-decoration-none" href="${pageContext.request.contextPath}/admin/categories">
+                <div class="card-body">
+                    <div class="fw-semibold">Quản lý danh mục</div>
+                    <div class="text-muted small">Thêm, sửa, sắp xếp và ẩn/hiện nhóm sản phẩm.</div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-4">
             <a class="card shadow-sm h-100 text-decoration-none" href="${pageContext.request.contextPath}/products">
                 <div class="card-body">
                     <div class="fw-semibold">Xem thực đơn công khai</div>
