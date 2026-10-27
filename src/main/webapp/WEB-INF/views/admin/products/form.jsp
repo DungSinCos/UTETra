@@ -29,10 +29,15 @@
                        required maxlength="50" ${empty product.id ? '' : 'readonly'}>
             </div>
             <div class="col-md-6 mb-3">
-                <label class="form-label" for="categoryId">Mã danh mục</label>
-                <%-- TODO: replace with a <select> once the Category module exists --%>
-                <input class="form-control" type="number" min="1" id="categoryId" name="categoryId"
-                       value="<c:out value='${product.categoryId}'/>" required>
+                <label class="form-label" for="categoryId">Danh mục</label>
+                <select class="form-select" id="categoryId" name="categoryId" required>
+                    <option value="">-- Chọn danh mục --</option>
+                    <c:forEach var="category" items="${categories}">
+                        <option value="${category.id}" ${product.categoryId eq category.id ? 'selected' : ''}>
+                            <c:out value="${category.name}"/><c:if test="${not category.active}"> (đã ẩn)</c:if>
+                        </option>
+                    </c:forEach>
+                </select>
             </div>
         </div>
 
