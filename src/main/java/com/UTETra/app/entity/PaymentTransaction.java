@@ -68,4 +68,12 @@ public class PaymentTransaction {
     public Status getStatus() { return status; }
     public LocalDateTime getPaidAt() { return paidAt; }
     public LocalDateTime getCreatedAt() { return createdAt; }
+
+    public void setId(Long id) { this.id = id; }
+    public void setOrder(CustomerOrder order) { this.order = order; }
+    public void setProvider(Provider provider) { this.provider = provider; }
+    public void setTransactionRef(String transactionRef) { this.transactionRef = transactionRef; }
+    public void setAmount(BigDecimal amount) { this.amount = amount; }
+    public void setStatus(Status status) { this.status = status; }
+    public void setPaidAt(LocalDateTime paidAt) { this.paidAt = paidAt; }
 }

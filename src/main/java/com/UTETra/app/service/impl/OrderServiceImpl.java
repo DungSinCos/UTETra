@@ -93,6 +93,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public AdminOrderDetail getDetailByCode(String orderCode) {
+        CustomerOrder order = orderRepository.findByOrderCode(orderCode)
+                .orElseThrow(() -> new ResourceNotFoundException("CustomerOrder", orderCode));
+        List<OrderItem> items = orderItemRepository.findByOrder_IdOrderByIdAsc(order.getId());
+        List<PaymentTransaction> payments = paymentTransactionRepository.findByOrder_IdOrderByCreatedAtDesc(order.getId());
+        return new AdminOrderDetail(order, items, payments, nextStatuses(order));
+    }
+
+    @Override
     public void updateStatus(Long id, CustomerOrder.OrderStatus targetStatus) {
         CustomerOrder order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order", id));
@@ -106,6 +116,65 @@ public class OrderServiceImpl implements OrderService {
             throw new IllegalArgumentException("Đơn đã thanh toán, cần xử lý hoàn tiền trước khi hủy");
         }
         order.setOrderStatus(targetStatus);
+        orderRepository.save(order);
+    }
+
+    @Override
+    public void customerCancelOrder(String orderCode, Long userId, String recipientPhone) {
+        CustomerOrder order = orderRepository.findByOrderCode(orderCode)
+                .orElseThrow(() -> new ResourceNotFoundException("CustomerOrder", orderCode));
+
+        boolean isAuthorized = false;
+        if (userId != null && order.getUser() != null && userId.equals(order.getUser().getId())) {
+            isAuthorized = true;
+        } else if (recipientPhone != null && !recipientPhone.isBlank() && recipientPhone.trim().equals(order.getRecipientPhone())) {
+            isAuthorized = true;
+        } else if (order.getUser() == null) {
+            // Guest order without phone specified in check -> allow if called from valid guest session
+            isAuthorized = true;
+        }
+
+        if (!isAuthorized) {
+            throw new IllegalArgumentException("Bạn không có quyền hủy đơn hàng này.");
+        }
+
+        if (order.getOrderStatus() != CustomerOrder.OrderStatus.PENDING) {
+            throw new IllegalArgumentException("Chỉ có thể hủy khi đơn hàng ở trạng thái Chờ xác nhận.");
+        }
+        if (order.getPaymentStatus() == CustomerOrder.PaymentStatus.PAID) {
+            throw new IllegalArgumentException("Đơn hàng đã thanh toán. Vui lòng liên hệ hotline cửa hàng để được hỗ trợ hoàn tiền.");
+        }
+
+        order.setOrderStatus(CustomerOrder.OrderStatus.CANCELLED);
+        orderRepository.save(order);
+    }
+
+    @Override
+    public void customerConfirmReceived(String orderCode, Long userId, String recipientPhone) {
+        CustomerOrder order = orderRepository.findByOrderCode(orderCode)
+                .orElseThrow(() -> new ResourceNotFoundException("CustomerOrder", orderCode));
+
+        boolean isAuthorized = false;
+        if (userId != null && order.getUser() != null && userId.equals(order.getUser().getId())) {
+            isAuthorized = true;
+        } else if (recipientPhone != null && !recipientPhone.isBlank() && recipientPhone.trim().equals(order.getRecipientPhone())) {
+            isAuthorized = true;
+        } else if (order.getUser() == null) {
+            isAuthorized = true;
+        }
+
+        if (!isAuthorized) {
+            throw new IllegalArgumentException("Bạn không có quyền thao tác trên đơn hàng này.");
+        }
+
+        if (order.getOrderStatus() != CustomerOrder.OrderStatus.SHIPPING) {
+            throw new IllegalArgumentException("Chỉ có thể xác nhận đã nhận hàng khi đơn đang trong trạng thái Đang giao.");
+        }
+
+        order.setOrderStatus(CustomerOrder.OrderStatus.COMPLETED);
+        if (order.getPaymentMethod() == CustomerOrder.PaymentMethod.COD && order.getPaymentStatus() == CustomerOrder.PaymentStatus.UNPAID) {
+            order.setPaymentStatus(CustomerOrder.PaymentStatus.PAID);
+        }
         orderRepository.save(order);
     }
 

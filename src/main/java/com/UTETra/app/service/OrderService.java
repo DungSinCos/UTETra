@@ -20,7 +20,13 @@ public interface OrderService {
 
     AdminOrderDetail getDetail(Long id);
 
+    AdminOrderDetail getDetailByCode(String orderCode);
+
     void updateStatus(Long id, CustomerOrder.OrderStatus targetStatus);
+
+    void customerCancelOrder(String orderCode, Long userId, String recipientPhone);
+
+    void customerConfirmReceived(String orderCode, Long userId, String recipientPhone);
 
     OrderDashboardSummary dashboardSummary(LocalDate from, LocalDate to);
 }
