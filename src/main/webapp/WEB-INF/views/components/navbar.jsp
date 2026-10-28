@@ -16,6 +16,13 @@
                 <a class="nav-item" href="${pageContext.request.contextPath}/products" data-path="/products">Thực Đơn</a>
                 <a class="nav-item" href="${pageContext.request.contextPath}/about" data-path="/about">Về UTETra</a>
                 <a class="nav-item" href="${pageContext.request.contextPath}/support" data-path="/support">Hỗ Trợ</a>
+                <a class="nav-item" href="${pageContext.request.contextPath}/cart" data-path="/cart">Giỏ hàng</a>
+
+                <%-- Chỉ khi đăng nhập thì mới hiển thị Quản lý đơn hàng --%>
+                <c:if test="${not empty currentUser}">
+                    <a class="nav-item" href="${pageContext.request.contextPath}/account/orders" data-path="/account/orders">Quản lý đơn hàng</a>
+                </c:if>
+
                 <c:if test="${currentUserRole == 'ADMIN' || currentUserRole == 'MANAGER'}">
                     <a class="nav-item" href="${pageContext.request.contextPath}/admin/dashboard" data-path="/admin">Quản trị</a>
                 </c:if>
@@ -24,10 +31,19 @@
             <div class="nav-actions">
                 <c:choose>
                     <c:when test="${not empty currentUser}">
-                        <span class="nav-user-greeting">
-                            Xin chào, <strong><c:out value="${currentUserName}"/></strong>
-                        </span>
-                        <a class="action-btn action-btn--ghost" href="${pageContext.request.contextPath}/logout">Đăng xuất</a>
+                        <div class="dropdown profile-dropdown">
+                            <button class="action-btn action-btn--solid dropdown-toggle profile-dropdown-toggle"
+                                    type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span>Xin chào, <strong><c:out value="${currentUserName}"/></strong></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end profile-dropdown-menu" aria-labelledby="profileDropdown">
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/account/profile">Thông tin cá nhân</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/account/orders">Quản lý đơn hàng</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/account/change-password">Đổi mật khẩu</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item profile-dropdown-logout" href="${pageContext.request.contextPath}/logout">Đăng xuất</a></li>
+                            </ul>
+                        </div>
                     </c:when>
                     <c:otherwise>
                         <a class="action-btn action-btn--ghost" href="${pageContext.request.contextPath}/login">Đăng nhập</a>

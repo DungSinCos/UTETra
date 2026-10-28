@@ -11,9 +11,15 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     /** Public menu: only products that are on sale. */
     List<Product> findByActiveTrueOrderByNameAsc();
 
+    List<Product> findByActiveTrueOrderByIdAsc();
+
     List<Product> findByActiveTrueAndCategoryIdOrderByNameAsc(Long categoryId);
 
+    List<Product> findByActiveTrueAndCategoryIdOrderByIdAsc(Long categoryId);
+
     List<Product> findByActiveTrueAndFeaturedTrueOrderByNameAsc();
+
+    List<Product> findByActiveTrueAndFeaturedTrueOrderByIdAsc();
 
     Optional<Product> findBySlug(String slug);
 

@@ -13,9 +13,23 @@ import java.time.LocalDateTime;
 @Table(name = "users")
 public class User {
 
-    public enum Role { CUSTOMER, STAFF, MANAGER, ADMIN }
+    public enum Role {
+        CUSTOMER("Khách hàng"), STAFF("Nhân viên"), MANAGER("Quản lý"), ADMIN("Quản trị viên");
+        private final String label;
+        Role(String label) { this.label = label; }
+        public String getLabel() { return label; }
+    }
 
-    public enum Status { ACTIVE, LOCKED, INACTIVE }
+    public enum Status {
+        ACTIVE("Đang hoạt động"), LOCKED("Đã khóa"), INACTIVE("Ngừng hoạt động");
+        private final String label;
+        Status(String label) { this.label = label; }
+        public String getLabel() { return label; }
+    }
+
+    public enum AuthProvider {
+        LOCAL, GOOGLE, FACEBOOK
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +46,10 @@ public class User {
 
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "auth_provider", nullable = false, length = 20, columnDefinition = "varchar(20) default 'LOCAL'")
+    private AuthProvider authProvider = AuthProvider.LOCAL;
 
     @Column(name = "avatar_url", length = 500)
     private String avatarUrl;
@@ -69,6 +87,9 @@ public class User {
 
     public String getPasswordHash() { return passwordHash; }
     public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
+
+    public AuthProvider getAuthProvider() { return authProvider; }
+    public void setAuthProvider(AuthProvider authProvider) { this.authProvider = authProvider; }
 
     public String getAvatarUrl() { return avatarUrl; }
     public void setAvatarUrl(String avatarUrl) { this.avatarUrl = avatarUrl; }

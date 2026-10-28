@@ -1,8 +1,10 @@
 package com.UTETra.app.config;
 
 import com.UTETra.app.repository.UserRepository;
+import com.UTETra.app.security.CustomOAuth2UserService;
 import com.UTETra.app.security.JwtAuthenticationFilter;
 import com.UTETra.app.security.JwtService;
+import com.UTETra.app.security.OAuth2AuthenticationSuccessHandler;
 import jakarta.servlet.DispatcherType;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
@@ -31,7 +33,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http,
                                            JwtService jwtService,
-                                           UserRepository userRepository) throws Exception {
+                                           UserRepository userRepository,
+                                           CustomOAuth2UserService customOAuth2UserService,
+                                           OAuth2AuthenticationSuccessHandler oauth2SuccessHandler) throws Exception {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -39,6 +43,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(a -> a
                 // Allow internal Servlet FORWARD dispatches to /WEB-INF/views/*.jsp after controller authorization
                 .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
+                .requestMatchers("/account/**").authenticated()
                 // Only ADMIN and MANAGER roles can access /admin and /admin/** (blocks STAFF, CUSTOMER, and guests)
                 .requestMatchers("/admin", "/admin/**").hasAnyRole("ADMIN", "MANAGER")
                 // All other public pages and static assets remain accessible
@@ -71,6 +76,10 @@ public class SecurityConfig {
                     }
                 })
             )
+            .oauth2Login(oauth -> oauth
+                .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                .successHandler(oauth2SuccessHandler)
+                .failureUrl("/login?oauthError=true"))
             .formLogin(AbstractHttpConfigurer::disable)
             .httpBasic(AbstractHttpConfigurer::disable)
             .logout(l -> l

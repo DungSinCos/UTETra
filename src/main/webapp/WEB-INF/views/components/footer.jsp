@@ -21,7 +21,7 @@
             <h4>Khám phá</h4>
             <ul>
                 <li><a href="${pageContext.request.contextPath}/">Trang chủ</a></li>
-                <li><a href="${pageContext.request.contextPath}/menu">Thực Đơn</a></li>
+                <li><a href="${pageContext.request.contextPath}/products">Thực Đơn</a></li>
                 <li><a href="${pageContext.request.contextPath}/about">Về UTETra</a></li>
                 <li><a href="${pageContext.request.contextPath}/support">Hỗ Trợ</a></li>
             </ul>

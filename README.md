@@ -96,6 +96,25 @@ mvn spring-boot:run -Dspring-boot.run.profiles=sqlserver
 | `CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name | `your_cloud_name` |
 | `CLOUDINARY_API_KEY` | Cloudinary API key | `your_api_key` |
 | `CLOUDINARY_API_SECRET` | Cloudinary API secret | `your_api_secret` |
+| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Google social login credentials | Not configured |
+| `FACEBOOK_CLIENT_ID` / `FACEBOOK_CLIENT_SECRET` | Facebook social login credentials | Not configured |
+| `SMTP_HOST` / `SMTP_PORT` | SMTP server | `smtp.gmail.com` / `587` |
+| `SMTP_USERNAME` / `SMTP_PASSWORD` | SMTP account used for reset emails | Not configured |
+| `SMTP_FROM` | Sender address for reset emails | Uses `SMTP_USERNAME` when set |
+| `APP_BASE_URL` | Base URL used in reset links | `http://localhost:8080` |
+
+#### Local OAuth and email setup
+
+OAuth and SMTP credentials are intentionally supplied by each developer's local environment and are not committed to Git. In Spring Tool Suite, open **Run -> Run Configurations -> Spring Boot App -> Environment** and add the variables above that you need. Restart the app after changing them. With the default placeholder OAuth values, the application can start, but Google/Facebook sign-in will not work.
+
+The team may use the same Google and Facebook OAuth applications for local development. Register these exact callback URLs in the provider consoles:
+
+```text
+http://localhost:8080/login/oauth2/code/google
+http://localhost:8080/login/oauth2/code/facebook
+```
+
+Share the provider secrets and SMTP credentials through the team's approved private credential store; each member enters them locally. For Gmail SMTP, use an app password rather than the account's normal password.
 
 Generate a secure JWT secret with:
 ```bash

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -44,10 +45,15 @@ public class AuthController {
      * Renders the login page, or automatically redirects if the user already has a valid JWT cookie.
      */
     @GetMapping("/login")
-    public String login(HttpServletRequest request) {
+    public String login(HttpServletRequest request,
+                        @RequestParam(defaultValue = "false") boolean oauthError,
+                        Model model) {
         Object current = request.getAttribute("currentUser");
         if (current instanceof User user) {
             return "redirect:" + resolveHomePath(user.getRole());
+        }
+        if (oauthError) {
+            model.addAttribute("oauthError", "Không thể đăng nhập qua mạng xã hội. Vui lòng thử lại.");
         }
         return "login";
     }
