@@ -5,7 +5,10 @@
 <head><title>Đổi mật khẩu</title></head>
 <body>
 <section class="container py-5" style="max-width:620px">
-    <h1 class="mb-4">Đổi mật khẩu</h1>
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+        <h1 class="mb-0">Đổi mật khẩu</h1>
+        <a class="btn btn-outline-secondary" href="${pageContext.request.contextPath}/">Về trang chủ</a>
+    </div>
     <c:if test="${not empty error}"><div class="alert alert-danger"><c:out value="${error}"/></div></c:if>
     <div class="card">
         <div class="card-body">
