@@ -4,65 +4,82 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <title>Quản lý sản phẩm</title>
+    <title>Quản lý sản phẩm - UTETra Admin</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css">
 </head>
 <body>
-<section class="container py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="mb-0">Sản phẩm</h1>
-        <a class="btn btn-primary" href="${pageContext.request.contextPath}/admin/products/new">+ Thêm sản phẩm</a>
-    </div>
+<section class="admin-page">
+    <div class="site-container">
 
-    <c:if test="${not empty message}">
-        <div class="alert alert-success"><c:out value="${message}"/></div>
-    </c:if>
+        <%-- Admin Navigation Bar --%>
+        <jsp:include page="/WEB-INF/views/components/admin-nav.jsp"/>
 
-    <div class="table-responsive">
-        <table class="table align-middle">
-            <thead>
-            <tr>
-                <th style="width:72px">Ảnh</th>
-                <th>SKU</th>
-                <th>Tên</th>
-                <th class="text-end">Giá</th>
-                <th>Trạng thái</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <c:forEach var="p" items="${products}">
-                <tr>
-                    <td>
-                        <c:if test="${not empty p.imageUrl}">
-                            <img src="<c:out value='${p.imageUrl}'/>" alt="" width="56" height="56" style="object-fit:cover" class="rounded">
-                        </c:if>
-                    </td>
-                    <td><c:out value="${p.sku}"/></td>
-                    <td><c:out value="${p.name}"/></td>
-                    <td class="text-end"><fmt:formatNumber value="${p.basePrice}" type="number" maxFractionDigits="0"/> đ</td>
-                    <td>
-                        <c:choose>
-                            <c:when test="${p.active}"><span class="badge text-bg-success">Đang bán</span></c:when>
-                            <c:otherwise><span class="badge text-bg-secondary">Đã ẩn</span></c:otherwise>
-                        </c:choose>
-                    </td>
-                    <td class="text-end">
-                        <a class="btn btn-sm btn-outline-secondary"
-                           href="${pageContext.request.contextPath}/admin/products/${p.id}/edit">Sửa</a>
-                        <form class="d-inline" method="post"
-                              action="${pageContext.request.contextPath}/admin/products/${p.id}/${p.active ? 'hide' : 'show'}">
-                            <button class="btn btn-sm btn-outline-danger" type="submit">
-                                ${p.active ? 'Ẩn' : 'Hiện'}
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-            </c:forEach>
-            <c:if test="${empty products}">
-                <tr><td colspan="6" class="text-center text-muted py-4">Chưa có sản phẩm nào.</td></tr>
-            </c:if>
-            </tbody>
-        </table>
+        <div class="admin-header">
+            <div>
+                <h1 class="admin-header__title">Quản lý sản phẩm</h1>
+                <div class="admin-header__desc">Danh sách toàn bộ thức uống trên menu UTETra.</div>
+            </div>
+            <div>
+                <a class="admin-btn admin-btn--primary" href="${pageContext.request.contextPath}/admin/products/new">+ Thêm sản phẩm mới</a>
+            </div>
+        </div>
+
+        <c:if test="${not empty message}">
+            <div class="alert alert-success" style="background:#dcfce7;color:#15803d;border-radius:12px;margin-bottom:1.5rem;font-weight:600;">
+                &#10003; <c:out value="${message}"/>
+            </div>
+        </c:if>
+
+        <div class="admin-card" style="padding:1.5rem;">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                    <tr>
+                        <th style="width:72px">Ảnh</th>
+                        <th>SKU</th>
+                        <th>Tên sản phẩm</th>
+                        <th class="text-end">Giá cơ bản</th>
+                        <th>Trạng thái</th>
+                        <th class="text-center" style="white-space:nowrap;width:140px;">Thao tác</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach var="p" items="${products}">
+                        <tr>
+                            <td>
+                                <c:if test="${not empty p.imageUrl}">
+                                    <img src="<c:out value='${p.imageUrl}'/>" alt="" width="56" height="56" style="object-fit:cover;border-radius:10px;border:1px solid #f0e2d3;">
+                                </c:if>
+                            </td>
+                            <td><code><c:out value="${p.sku}"/></code></td>
+                            <td><strong style="color:var(--ut-text, #2d1e15);"><c:out value="${p.name}"/></strong></td>
+                            <td class="text-end fw-bold"><fmt:formatNumber value="${p.basePrice}" type="number" maxFractionDigits="0"/> đ</td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${p.active}"><span class="badge text-bg-success">Đang bán</span></c:when>
+                                    <c:otherwise><span class="badge text-bg-secondary">Đã ẩn</span></c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td class="text-center">
+                                <a class="admin-btn admin-btn--outline" style="padding:5px 14px;font-size:0.85rem;"
+                                   href="${pageContext.request.contextPath}/admin/products/${p.id}/edit">Sửa</a>
+                                <form class="d-inline" method="post"
+                                      action="${pageContext.request.contextPath}/admin/products/${p.id}/${p.active ? 'hide' : 'show'}">
+                                    <button class="admin-btn admin-btn--outline" style="padding:5px 14px;font-size:0.85rem;border-color:#dc3545;color:#dc3545;" type="submit">
+                                        ${p.active ? 'Ẩn' : 'Hiện'}
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    <c:if test="${empty products}">
+                        <tr><td colspan="6" class="text-center text-muted py-5">Chưa có sản phẩm nào.</td></tr>
+                    </c:if>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
 </section>
 </body>

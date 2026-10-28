@@ -47,8 +47,10 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
+    white-space: nowrap !important;
     gap: 0.5rem;
-    padding: 12px 24px;
+    padding: 10px 22px;
     font-family: var(--ut-font, inherit);
     border-radius: 999px;
     font-weight: 700;
@@ -57,6 +59,7 @@
     text-decoration: none;
     transition: all 0.2s ease;
     border: none;
+    line-height: 1.25;
 }
 
 /* Primary brown solid button (identical to Login button) */
