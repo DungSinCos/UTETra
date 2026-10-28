@@ -39,10 +39,16 @@
         </div>
     </section>
 
-    <section class="about-promise">
-        <div class="info-container promise-inner">
-            <div><span class="eyebrow eyebrow-light">LỜI HỨA TỪ UTETRA</span><h2>Vị ngon bắt đầu từ sự tử tế.</h2><p>Cảm ơn bạn đã để UTETra góp một chút ngọt ngào vào ngày thường của mình.</p></div>
-            <a class="info-button info-button-light" href="${pageContext.request.contextPath}/support">Liên hệ với tụi mình</a>
+    <section class="info-container about-promise-wrap">
+        <div class="about-promise-card">
+            <div class="about-promise-content">
+                <span class="eyebrow">LỜI HỨA TỪ UTETRA</span>
+                <h2>Vị ngon bắt đầu từ sự tử tế.</h2>
+                <p>Cảm ơn bạn đã để UTETra góp một chút ngọt ngào vào ngày thường của mình.</p>
+            </div>
+            <a class="info-button" href="${pageContext.request.contextPath}/support">
+                Liên hệ với tụi mình <span aria-hidden="true">→</span>
+            </a>
         </div>
     </section>
 </main>
