@@ -264,6 +264,36 @@
     padding: 10px 28px;
 }
 
+.otp-inputs {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.otp-inputs .otp-digit {
+    width: 100%;
+    height: 54px;
+    padding: 0;
+    text-align: center;
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--ut-primary);
+    background-color: var(--ut-cream);
+    border: 1.5px solid var(--ut-border);
+    border-radius: 12px;
+}
+
+.auth-link-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+}
+
+
 
 @media (max-width: 480px) {
     .auth-page {
