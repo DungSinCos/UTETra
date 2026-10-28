@@ -102,15 +102,14 @@
             <div class="product-grid detail-related-grid">
                 <c:forEach var="rp" items="${relatedProducts}">
                     <fmt:formatNumber value="${rp.basePrice}" type="number" maxFractionDigits="0" var="rpFormattedPrice"/>
-                    <jsp:include page="/WEB-INF/views/components/product-card.jsp">
-                        <jsp:param name="id" value="${rp.id}"/>
-                        <jsp:param name="name" value="${rp.name}"/>
-                        <jsp:param name="desc" value="${rp.description}"/>
-                        <jsp:param name="price" value="${rpFormattedPrice}đ"/>
-                        <jsp:param name="image" value="${rp.imageUrl}"/>
-                        <jsp:param name="badge" value="${rp.featured ? 'Bán chạy' : 'Mới'}"/>
-                        <jsp:param name="badgeClass" value="${rp.featured ? '' : 'product-badge--new'}"/>
-                    </jsp:include>
+                    <c:set var="productCardId" value="${rp.id}" scope="request"/>
+                    <c:set var="productCardName" value="${rp.name}" scope="request"/>
+                    <c:set var="productCardDesc" value="${rp.description}" scope="request"/>
+                    <c:set var="productCardPrice" value="${rpFormattedPrice}đ" scope="request"/>
+                    <c:set var="productCardImage" value="${rp.imageUrl}" scope="request"/>
+                    <c:set var="productCardBadge" value="${rp.featured ? 'Bán chạy' : 'Mới'}" scope="request"/>
+                    <c:set var="productCardBadgeClass" value="${rp.featured ? '' : 'product-badge--new'}" scope="request"/>
+                    <jsp:include page="/WEB-INF/views/components/product-card.jsp"/>
                 </c:forEach>
             </div>
         </section>

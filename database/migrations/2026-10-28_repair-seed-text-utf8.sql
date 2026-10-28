@@ -1,0 +1,38 @@
+-- Restore UTF-8 seed text for catalog records that were imported with a mismatched client charset.
+-- Safe to rerun; values are reset to the canonical seed text in database/UTETra.sql.
+UPDATE branches SET name='UTETra Thủ Đức - Võ Văn Ngân', address_line='1 Võ Văn Ngân, Phường Linh Chiểu', district='TP. Thủ Đức', city='TP. Hồ Chí Minh' WHERE id=1;
+UPDATE branches SET name='UTETra Quận 1 - Nguyễn Huệ', address_line='68 Nguyễn Huệ, Phường Bến Nghé', district='Quận 1', city='TP. Hồ Chí Minh' WHERE id=2;
+UPDATE categories SET name='Trà sữa', description='Trà sữa truyền thống và hiện đại pha mới mỗi ngày' WHERE id=1;
+UPDATE categories SET name='Kem Cheese', description='Trà nguyên lá phủ lớp kem phô mai mặn béo mịn màng' WHERE id=2;
+UPDATE categories SET name='Matcha & Latte', description='Matcha Nhật Bản và các dòng Latte sữa tươi thanh trùng' WHERE id=3;
+UPDATE categories SET name='Trà trái cây', description='Trà thanh mát kết hợp trái cây tươi nhiệt đới' WHERE id=4;
+UPDATE products SET name='Trà Sữa Trân Châu Đường Đen', description='Sữa tươi béo ngậy hòa quyện cùng trân châu đường đen dẻo thơm. Trân châu được ninh kỹ cùng đường đen Hàn Quốc tạo độ bóng mượt, ấm nóng quyện cùng sữa tươi mát lạnh.' WHERE id=1;
+UPDATE products SET name='Trà Oolong Kem Cheese', description='Oolong rang thơm nồng phủ lớp kem cheese mặn mịn béo. Lá trà Oolong cao nguyên được ủ ở nhiệt độ chuẩn, giữ trọn hậu vị ngọt thanh tự nhiên kết hợp lớp kem phô mai đánh bông mịn màng mỗi ngày.' WHERE id=2;
+UPDATE products SET name='Matcha Latte Đậu Đỏ', description='Matcha Uji Nhật Bản kết hợp đậu đỏ ninh mềm ngọt dịu. Bột trà xanh nguyên chất đánh tan cùng sữa tươi thanh trùng mát lạnh và hạt đậu đỏ bùi thơm nấu thủ công.' WHERE id=3;
+UPDATE products SET name='Trà Đào Cam Sả', description='Trà đen thanh mát cùng đào miếng giòn ngọt, cam vàng tươi mọng nước và hương sả thơm dịu, mang lại cảm giác sảng khoái tức thì cho ngày dài năng động.' WHERE id=4;
+UPDATE products SET name='Trà Sữa Oolong Kem Cheese', description='Lá trà nguyên chất, sữa tươi thanh trùng cùng trân châu nấu thủ công mỗi sáng. Sự giao thoa hoàn hảo giữa vị trà sữa Oolong đậm đà và lớp kem cheese béo mặn đặc trưng của UTETra.' WHERE id=5;
+UPDATE products SET name='Trà Sữa Truyền Thống Hoàng Gia', description='Hồng trà Assam đậm vị kết hợp sữa tươi béo dịu cùng trân châu đen dẻo dai chuẩn vị truyền thống.' WHERE id=6;
+UPDATE products SET name='Trà Sữa Khoai Môn Tươi', description='Khoai môn tươi nghiền mịn nấu thủ công mỗi ngày quyện cùng sữa tươi thanh trùng thơm bùi tự nhiên.' WHERE id=7;
+UPDATE products SET name='Trà Sữa Socola Hạt Dẻ', description='Socola nguyên chất Bỉ kết hợp hương hạt dẻ rang thơm lừng và lớp sữa tươi sánh mịn.' WHERE id=8;
+UPDATE products SET name='Trà Sữa Bá Tước Earl Grey', description='Trà đen Bá Tước ướp tinh dầu cam Bergamot thanh lịch pha cùng sữa tươi ít ngọt.' WHERE id=9;
+UPDATE products SET name='Trà Sữa Pudding Trứng Nướng', description='Trà sữa Oolong thơm dịu đi kèm lớp pudding trứng mềm mịn tan ngay đầu lưỡi.' WHERE id=10;
+UPDATE products SET name='Hồng Trà Kem Cheese Bông Tuyết', description='Hồng trà ủ lạnh thanh khiết phủ lớp kem phô mai mặn béo đánh bông như mây.' WHERE id=11;
+UPDATE products SET name='Lục Trà Nhài Kem Cheese', description='Lục trà ướp hoa nhài tươi thơm ngát kết hợp kem cheese sánh mịn hài hòa.' WHERE id=12;
+UPDATE products SET name='Trà Đen Macchiato Kem Phô Mai', description='Trà đen đậm đà quyện cùng lớp bọt kem macchiato phô mai béo ngậy.' WHERE id=13;
+UPDATE products SET name='Trà Thiết Quan Âm Kem Cheese', description='Trà Thiết Quan Âm nướng thơm sâu lắng cùng lớp kem cheese mặn dịu.' WHERE id=14;
+UPDATE products SET name='Cacao Dầm Kem Cheese Hạnh Nhân', description='Cacao nguyên chất đậm vị phủ kem cheese và hạnh nhân lát nướng giòn rụm.' WHERE id=15;
+UPDATE products SET name='Matcha Macchiato Kem Phô Mai', description='Trà xanh Matcha Nhật Bản kết hợp lớp kem phô mai macchiato mặn ngọt cân bằng.' WHERE id=16;
+UPDATE products SET name='Hojicha Latte Sữa Tươi', description='Trà xanh rang Hojicha thơm hương khói nhẹ nhàng hòa quyện cùng sữa tươi thanh trùng.' WHERE id=17;
+UPDATE products SET name='Matcha Đá Xay Kem Tươi', description='Matcha Uji xay nhuyễn mát lạnh phủ lớp kem tươi whipping mềm mịn.' WHERE id=18;
+UPDATE products SET name='Sữa Tươi Trân Châu Đường Đen Latte', description='Sữa tươi nguyên kem thanh mát rót trên nền trân châu đường đen nấu ấm.' WHERE id=19;
+UPDATE products SET name='Matcha Sữa Yến Mạch Thuần Chay', description='Sự kết hợp lành mạnh giữa Matcha nguyên chất và sữa yến mạch thơm béo tự nhiên.' WHERE id=20;
+UPDATE products SET name='Trà Vải Hoa Hồng Thanh Mát', description='Trà hoa hồng thơm dịu kết hợp trái vải ngâm giòn ngọt giải nhiệt ngày hè.' WHERE id=21;
+UPDATE products SET name='Trà Nhiệt Đới Bốn Mùa', description='Lục trà nhài kết hợp cam, chanh dây, dưa hấu và đào tươi giàu vitamin.' WHERE id=22;
+UPDATE products SET name='Trà Dâu Tằm Pha Lê Tuyết', description='Mứt dâu tằm Đà Lạt chua ngọt tự nhiên cùng thạch pha lê giòn sần sật.' WHERE id=23;
+UPDATE products SET name='Trà Xoài Chanh Dây Nha Đam', description='Vị xoài chín ngọt ngào hòa quyện cùng chanh dây chua dịu và nha đam tươi mát.' WHERE id=24;
+UPDATE products SET name='Trà Ổi Hồng Muối Ớt', description='Nước ép ổi hồng tươi kết hợp lục trà thanh mát tạo hương vị độc đáo cuốn hút.' WHERE id=25;
+UPDATE toppings SET name='Trân châu đường đen' WHERE id=1;
+UPDATE toppings SET name='Kem cheese macchiato' WHERE id=2;
+UPDATE toppings SET name='Đậu đỏ Nhật Bản' WHERE id=3;
+UPDATE toppings SET name='Thạch đào' WHERE id=4;
+UPDATE toppings SET name='Pudding trứng' WHERE id=5;

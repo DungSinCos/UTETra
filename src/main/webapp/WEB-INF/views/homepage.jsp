@@ -51,15 +51,14 @@
             <fmt:setLocale value="vi_VN"/>
             <c:forEach var="p" items="${featuredProducts}">
                 <fmt:formatNumber value="${p.basePrice}" type="number" maxFractionDigits="0" var="formattedPrice"/>
-                <jsp:include page="/WEB-INF/views/components/product-card.jsp">
-                    <jsp:param name="id" value="${p.id}"/>
-                    <jsp:param name="name" value="${p.name}"/>
-                    <jsp:param name="desc" value="${p.description}"/>
-                    <jsp:param name="price" value="${formattedPrice}đ"/>
-                    <jsp:param name="image" value="${p.imageUrl}"/>
-                    <jsp:param name="badge" value="${p.featured ? 'Nổi bật' : ''}"/>
-                    <jsp:param name="category" value="${p.categoryId}"/>
-                </jsp:include>
+                <c:set var="productCardId" value="${p.id}" scope="request"/>
+                <c:set var="productCardName" value="${p.name}" scope="request"/>
+                <c:set var="productCardDesc" value="${p.description}" scope="request"/>
+                <c:set var="productCardPrice" value="${formattedPrice}đ" scope="request"/>
+                <c:set var="productCardImage" value="${p.imageUrl}" scope="request"/>
+                <c:set var="productCardBadge" value="${p.featured ? 'Nổi bật' : ''}" scope="request"/>
+                <c:set var="productCardCategory" value="${p.categoryId}" scope="request"/>
+                <jsp:include page="/WEB-INF/views/components/product-card.jsp"/>
             </c:forEach>
         </div>
 

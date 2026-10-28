@@ -65,16 +65,15 @@
             <c:forEach var="p" items="${products}">
                 <fmt:formatNumber value="${p.basePrice}" type="number" maxFractionDigits="0" var="formattedPrice"/>
                 <c:set var="catSlug" value="${categorySlugMap[p.categoryId]}"/>
-                <jsp:include page="/WEB-INF/views/components/product-card.jsp">
-                    <jsp:param name="id" value="${p.id}"/>
-                    <jsp:param name="name" value="${p.name}"/>
-                    <jsp:param name="desc" value="${p.description}"/>
-                    <jsp:param name="price" value="${formattedPrice}đ"/>
-                    <jsp:param name="image" value="${p.imageUrl}"/>
-                    <jsp:param name="badge" value="${p.featured ? 'Bán chạy' : 'Mới'}"/>
-                    <jsp:param name="badgeClass" value="${p.featured ? '' : 'product-badge--new'}"/>
-                    <jsp:param name="category" value="${catSlug}"/>
-                </jsp:include>
+                <c:set var="productCardId" value="${p.id}" scope="request"/>
+                <c:set var="productCardName" value="${p.name}" scope="request"/>
+                <c:set var="productCardDesc" value="${p.description}" scope="request"/>
+                <c:set var="productCardPrice" value="${formattedPrice}đ" scope="request"/>
+                <c:set var="productCardImage" value="${p.imageUrl}" scope="request"/>
+                <c:set var="productCardBadge" value="${p.featured ? 'Bán chạy' : 'Mới'}" scope="request"/>
+                <c:set var="productCardBadgeClass" value="${p.featured ? '' : 'product-badge--new'}" scope="request"/>
+                <c:set var="productCardCategory" value="${catSlug}" scope="request"/>
+                <jsp:include page="/WEB-INF/views/components/product-card.jsp"/>
             </c:forEach>
         </div>
 

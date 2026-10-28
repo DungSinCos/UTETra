@@ -1,35 +1,35 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
-<c:set var="productDetailUrl" value="${pageContext.request.contextPath}/products/${param.id}" />
+<c:set var="productDetailUrl" value="${pageContext.request.contextPath}/products/${requestScope.productCardId}" />
 
 <article class="product-item"
-         id="product-${param.id}"
+         id="product-${requestScope.productCardId}"
          data-product-card
-         data-product-id="<c:out value='${param.id}'/>"
-         data-category="<c:out value='${param.category}'/>"
-         data-name="<c:out value='${param.name}'/>"
-         data-price="<c:out value='${param.price}'/>"
+         data-product-id="<c:out value='${requestScope.productCardId}'/>"
+         data-category="<c:out value='${requestScope.productCardCategory}'/>"
+         data-name="<c:out value='${requestScope.productCardName}'/>"
+         data-price="<c:out value='${requestScope.productCardPrice}'/>"
          onclick="if(!event.target.closest('[data-add-to-cart]')){window.location.href='<c:out value="${productDetailUrl}"/>';}"
          role="link"
          tabindex="0"
          onkeydown="if((event.key==='Enter'||event.key===' ')&&!event.target.closest('[data-add-to-cart]')){event.preventDefault();window.location.href='<c:out value="${productDetailUrl}"/>';}">
     <div class="product-thumb">
-        <c:if test="${not empty param.badge}">
-            <span class="product-badge ${not empty param.badgeClass ? param.badgeClass : ''}"><c:out value="${param.badge}"/></span>
+        <c:if test="${not empty requestScope.productCardBadge}">
+            <span class="product-badge ${requestScope.productCardBadgeClass}"><c:out value="${requestScope.productCardBadge}"/></span>
         </c:if>
-        <img src="<c:out value='${param.image}'/>" alt="<c:out value='${param.name}'/>" loading="lazy">
+        <img src="<c:out value='${requestScope.productCardImage}'/>" alt="<c:out value='${requestScope.productCardName}'/>" loading="lazy">
     </div>
     <div class="product-body">
-        <h3 class="product-name"><c:out value="${param.name}"/></h3>
-        <p class="product-desc"><c:out value="${param.desc}"/></p>
+        <h3 class="product-name"><c:out value="${requestScope.productCardName}"/></h3>
+        <p class="product-desc"><c:out value="${requestScope.productCardDesc}"/></p>
         <div class="product-footer">
-            <span class="product-price"><c:out value="${param.price}"/></span>
+            <span class="product-price"><c:out value="${requestScope.productCardPrice}"/></span>
             <button type="button"
                     class="product-add"
-                    data-add-to-cart="<c:out value='${param.id}'/>"
-                    data-product-name="<c:out value='${param.name}'/>"
-                    aria-label="Thêm <c:out value='${param.name}'/> vào giỏ hàng">+</button>
+                    data-add-to-cart="<c:out value='${requestScope.productCardId}'/>"
+                    data-product-name="<c:out value='${requestScope.productCardName}'/>"
+                    aria-label="Thêm <c:out value='${requestScope.productCardName}'/> vào giỏ hàng">+</button>
         </div>
     </div>
 </article>
