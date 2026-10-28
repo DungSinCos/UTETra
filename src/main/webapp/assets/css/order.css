@@ -1,0 +1,524 @@
+/* ============================================================
+   UTETra Order Detail, Invoice and Tracking Styles
+   Synchronized with Login & Base Brand Design System
+   ============================================================ */
+
+.order-page {
+    padding: 3rem 0 5rem;
+    background: linear-gradient(135deg, var(--ut-cream, #fff8f0) 0%, var(--ut-accent-soft, #fbe6cf) 100%);
+    min-height: calc(100vh - var(--ut-header-h, 72px));
+    font-family: var(--ut-font, "Be Vietnam Pro", system-ui, -apple-system, sans-serif);
+    color: var(--ut-text, #2d1e15);
+}
+
+.order-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1.5px solid var(--ut-border, #f0e2d3);
+}
+
+.order-header__title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--ut-text, #2d1e15);
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+.order-header__meta {
+    font-size: 0.95rem;
+    color: var(--ut-muted, #7d6a5d);
+    margin-top: 0.35rem;
+}
+
+.order-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+/* Button styles synchronized with Login button */
+.order-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 12px 24px;
+    font-family: var(--ut-font, inherit);
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+/* Primary brown solid button (identical to Login button) */
+.order-btn--primary {
+    background-color: var(--ut-primary, #7b4a2b);
+    color: var(--ut-white, #ffffff) !important;
+    box-shadow: 0 10px 24px rgba(123, 74, 43, 0.28);
+}
+.order-btn--primary:hover {
+    background-color: var(--ut-primary-dark, #5a3520);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(123, 74, 43, 0.35);
+}
+
+.order-btn--success {
+    background-color: var(--ut-primary, #7b4a2b);
+    color: var(--ut-white, #ffffff) !important;
+    box-shadow: 0 10px 24px rgba(123, 74, 43, 0.28);
+}
+.order-btn--success:hover {
+    background-color: var(--ut-primary-dark, #5a3520);
+    transform: translateY(-2px);
+}
+
+/* Outline auxiliary buttons */
+.order-btn--outline {
+    background-color: transparent;
+    border: 1.5px solid var(--ut-primary, #7b4a2b);
+    color: var(--ut-primary, #7b4a2b);
+}
+.order-btn--outline:hover {
+    background-color: var(--ut-primary, #7b4a2b);
+    color: #ffffff !important;
+    transform: translateY(-1px);
+}
+
+.order-btn--subtle {
+    background-color: transparent;
+    border: 1.5px solid var(--ut-border, #f0e2d3);
+    color: var(--ut-muted, #7d6a5d);
+}
+.order-btn--subtle:hover {
+    background-color: var(--ut-white, #ffffff);
+    border-color: var(--ut-accent, #e9a15b);
+    color: var(--ut-text, #2d1e15);
+}
+
+.order-btn--danger {
+    background-color: transparent;
+    border: 1.5px solid #e11d48;
+    color: #e11d48;
+}
+.order-btn--danger:hover {
+    background-color: #e11d48;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+}
+
+/* Cards (Rounded corners, subtle border, smooth shadow matching Login auth-card) */
+.order-stepper-card,
+.invoice-card {
+    background-color: var(--ut-white, #ffffff);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 15px 35px rgba(123, 74, 43, 0.08);
+    border: 1.5px solid var(--ut-border, #f0e2d3);
+    margin-bottom: 2rem;
+}
+
+.stepper-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    color: var(--ut-text, #2d1e15);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Stepper Progress Bar */
+.stepper {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.stepper::before {
+    content: '';
+    position: absolute;
+    top: 24px;
+    left: 45px;
+    right: 45px;
+    height: 4px;
+    background: var(--ut-border, #f0e2d3);
+    z-index: 1;
+}
+
+.stepper-step {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    text-align: center;
+}
+
+.stepper-step__circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--ut-white, #ffffff);
+    border: 3px solid #d8c6b6;
+    color: #a49182;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-bottom: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.stepper-step__label {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--ut-muted, #7d6a5d);
+}
+
+.stepper-step__sub {
+    font-size: 0.78rem;
+    color: #9d897c;
+    margin-top: 0.2rem;
+}
+
+.stepper-step.is-completed .stepper-step__circle {
+    background: #10b981;
+    border-color: #10b981;
+    color: #ffffff;
+}
+.stepper-step.is-completed .stepper-step__label {
+    color: #10b981;
+}
+
+.stepper-step.is-active .stepper-step__circle {
+    background: var(--ut-primary, #7b4a2b);
+    border-color: var(--ut-primary, #7b4a2b);
+    color: #ffffff;
+    box-shadow: 0 0 0 5px rgba(123, 74, 43, 0.2);
+}
+.stepper-step.is-active .stepper-step__label {
+    color: var(--ut-primary, #7b4a2b);
+    font-weight: 800;
+}
+
+.stepper-cancelled-alert {
+    background: #fdf2f2;
+    border: 1.5px solid #fecaca;
+    border-radius: 14px;
+    padding: 1.1rem 1.4rem;
+    color: #b91c1c;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+/* VietQR Card */
+.vietqr-card {
+    background-color: var(--ut-white, #ffffff);
+    border: 2px dashed var(--ut-accent, #e9a15b);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: center;
+    box-shadow: 0 15px 35px rgba(123, 74, 43, 0.08);
+}
+
+.vietqr-card__qr {
+    background: var(--ut-cream, #fff8f0);
+    padding: 1rem;
+    border-radius: 16px;
+    border: 1px solid var(--ut-border, #f0e2d3);
+    text-align: center;
+}
+
+.vietqr-card__qr img {
+    width: 200px;
+    height: 200px;
+    display: block;
+    object-fit: contain;
+}
+
+.vietqr-card__info {
+    flex: 1;
+    min-width: 260px;
+}
+
+.vietqr-card__title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--ut-primary, #7b4a2b);
+    margin-bottom: 0.5rem;
+}
+
+.vietqr-table {
+    width: 100%;
+    margin-top: 1rem;
+    font-size: 0.95rem;
+}
+
+.vietqr-table td {
+    padding: 0.45rem 0;
+}
+.vietqr-table td:first-child {
+    color: var(--ut-muted, #7d6a5d);
+    width: 140px;
+}
+.vietqr-table td:last-child {
+    font-weight: 700;
+    color: var(--ut-text, #2d1e15);
+}
+
+/* Invoice Grid */
+.invoice-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+}
+
+@media (max-width: 900px) {
+    .invoice-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.invoice-card__title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--ut-text, #2d1e15);
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.85rem;
+    border-bottom: 1.5px solid var(--ut-border, #f0e2d3);
+}
+
+.invoice-info-rows {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+@media (max-width: 600px) {
+    .invoice-info-rows {
+        grid-template-columns: 1fr;
+    }
+}
+
+.info-block__label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--ut-muted, #7d6a5d);
+    margin-bottom: 0.25rem;
+}
+
+.info-block__val {
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: var(--ut-text, #2d1e15);
+}
+
+/* Items Table */
+.invoice-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.invoice-table th {
+    text-align: left;
+    padding: 0.85rem;
+    background: var(--ut-cream, #fff8f0);
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--ut-text, #2d1e15);
+    border-bottom: 1.5px solid var(--ut-border, #f0e2d3);
+}
+
+.invoice-table td {
+    padding: 1rem 0.85rem;
+    border-bottom: 1px solid var(--ut-border, #f0e2d3);
+    font-size: 0.95rem;
+    vertical-align: middle;
+}
+
+.item-name {
+    font-weight: 700;
+    color: var(--ut-text, #2d1e15);
+}
+
+.item-options {
+    font-size: 0.84rem;
+    color: var(--ut-muted, #7d6a5d);
+    margin-top: 0.2rem;
+}
+
+/* Totals Summary */
+.summary-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.summary-table td {
+    padding: 0.55rem 0;
+    font-size: 0.95rem;
+}
+
+.summary-table td:last-child {
+    text-align: right;
+    font-weight: 700;
+}
+
+.summary-total-row td {
+    padding-top: 1.1rem;
+    border-top: 2px dashed var(--ut-border, #f0e2d3);
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--ut-text, #2d1e15);
+}
+.summary-total-row td:last-child {
+    color: var(--ut-primary, #7b4a2b);
+}
+
+/* Badges */
+.badge-status {
+    display: inline-block;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.badge-paid {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.badge-unpaid {
+    background: var(--ut-accent-soft, #fbe6cf);
+    color: var(--ut-primary, #7b4a2b);
+}
+
+.badge-failed {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+/* Tracking Card in order-tracking.jsp */
+.tracking-card {
+    max-width: 540px;
+    margin: 3rem auto;
+    background-color: var(--ut-white, #ffffff);
+    border-radius: 24px;
+    padding: 3rem 2.5rem;
+    box-shadow: 0 20px 50px rgba(123, 74, 43, 0.12);
+    border: 1.5px solid var(--ut-border, #f0e2d3);
+    font-family: var(--ut-font, "Be Vietnam Pro", system-ui, -apple-system, sans-serif);
+}
+
+.tracking-title {
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: var(--ut-text, #2d1e15);
+    text-align: center;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.5px;
+}
+
+.tracking-desc {
+    color: var(--ut-muted, #7d6a5d);
+    font-size: 0.96rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.tracking-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 1.25rem;
+}
+
+.tracking-field label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--ut-text, #2d1e15);
+}
+
+.tracking-field input {
+    width: 100%;
+    padding: 13px 16px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    color: var(--ut-text, #2d1e15);
+    background-color: var(--ut-cream, #fff8f0);
+    border: 1.5px solid var(--ut-border, #f0e2d3);
+    border-radius: 12px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.tracking-field input:focus {
+    background-color: var(--ut-white, #ffffff);
+    border-color: var(--ut-accent, #e9a15b);
+    box-shadow: 0 0 0 4px rgba(233, 161, 91, 0.2);
+}
+
+.tracking-submit-btn {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 15px;
+    font-family: var(--ut-font, inherit);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--ut-white, #ffffff);
+    background-color: var(--ut-primary, #7b4a2b);
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: 0 10px 24px rgba(123, 74, 43, 0.28);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.tracking-submit-btn:hover {
+    background-color: var(--ut-primary-dark, #5a3520);
+    transform: translateY(-2px);
+}
+
+/* Print CSS */
+@media print {
+    body {
+        background: #fff !important;
+    }
+    .site-header, .site-footer, .order-actions, .order-stepper-card, .vietqr-card, .back-link {
+        display: none !important;
+    }
+    .order-page {
+        padding: 0 !important;
+        background: none !important;
+    }
+    .invoice-card {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+    }
+    .invoice-grid {
+        display: block !important;
+    }
+}
