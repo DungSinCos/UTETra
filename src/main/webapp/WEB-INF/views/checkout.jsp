@@ -8,7 +8,7 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <title>Thanh toán</title>
+    <title>Thanh toán đơn hàng - UTETra</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/checkout.css">
 </head>
 <body>
@@ -37,7 +37,7 @@
                     <input type="hidden" name="branchId" value="<c:out value='${selectedBranchId}'/>">
                     <input type="hidden" name="addressId" id="selectedAddressId" value="<c:out value='${currentAddress != null ? currentAddress.id : ""}'/>">
 
-                    <!-- Left Column: Delivery Address & Payment Method Skeleton -->
+                    <!-- Left Column: Delivery Address & Payment Methods -->
                     <div class="checkout-main">
 
                         <!-- 1. Delivery Address Section -->
@@ -62,7 +62,7 @@
                                 </div>
                             </div>
 
-                            <!-- Current Saved Address Card (shown when logged-in user has an address in user_addresses) -->
+                            <!-- Current Saved Address Card -->
                             <c:if test="${isLoggedIn and hasSavedAddress}">
                                 <div class="saved-address-box" id="savedAddressBox">
                                     <div class="saved-address-box__info">
@@ -79,7 +79,7 @@
                                 </div>
                             </c:if>
 
-                            <!-- Address Input Form (shown immediately if no saved address or not logged in; toggleable if saved address exists) -->
+                            <!-- Address Input Form -->
                             <div class="address-form-wrap" id="addressFormWrap" ${isLoggedIn and hasSavedAddress ? 'hidden' : ''}>
                                 <div class="checkout-form-grid">
                                     <div class="checkout-field">
@@ -144,7 +144,7 @@
                             </div>
                         </div>
 
-                        <!-- 2. Payment Method Skeleton (Cash & PayPal) -->
+                        <!-- 2. Payment Method Section -->
                         <div class="checkout-card">
                             <div class="checkout-card__head">
                                 <span class="checkout-step-badge">2</span>
@@ -160,47 +160,53 @@
                                     <input type="radio" name="paymentMethod" value="CASH" checked>
                                     <span class="payment-option__icon payment-option__icon--cash" aria-hidden="true">&#8363;</span>
                                     <span class="payment-option__body">
-                                        <strong class="payment-option__name">Tiền mặt (Cash on Delivery)</strong>
-                                        <span class="payment-option__sub">Thanh toán bằng tiền mặt trực tiếp khi nhận đồ uống</span>
+                                        <strong class="payment-option__name">Tiền mặt khi nhận hàng (COD)</strong>
+                                        <span class="payment-option__sub">Thanh toán tiền mặt cho shipper khi nhận được trà sữa</span>
                                     </span>
                                     <span class="payment-option__check" aria-hidden="true"></span>
                                 </label>
 
-                                <!-- Option 2: PayPal (Skeleton) -->
-                                <label class="payment-option" data-payment-card="PAYPAL">
-                                    <input type="radio" name="paymentMethod" value="PAYPAL">
-                                    <span class="payment-option__icon payment-option__icon--paypal" aria-hidden="true">P</span>
+                                <!-- Option 2: VNPay -->
+                                <label class="payment-option" data-payment-card="VNPAY">
+                                    <input type="radio" name="paymentMethod" value="VNPAY">
+                                    <span class="payment-option__icon" style="background:#005baa;color:#fff;font-weight:700;font-size:0.75rem;" aria-hidden="true">VNPAY</span>
                                     <span class="payment-option__body">
-                                        <strong class="payment-option__name">PayPal</strong>
-                                        <span class="payment-option__sub">Thanh toán trực tuyến nhanh chóng qua cổng PayPal</span>
+                                        <strong class="payment-option__name">Cổng thanh toán VNPay</strong>
+                                        <span class="payment-option__sub">Thanh toán qua VNPAY-QR, Thẻ ATM nội địa hoặc thẻ Quốc tế</span>
+                                    </span>
+                                    <span class="payment-option__check" aria-hidden="true"></span>
+                                </label>
+
+                                <!-- Option 3: VietQR / Bank Transfer -->
+                                <label class="payment-option" data-payment-card="BANK_TRANSFER">
+                                    <input type="radio" name="paymentMethod" value="BANK_TRANSFER">
+                                    <span class="payment-option__icon" style="background:#e8f4fd;color:#007bff;font-size:1.1rem;" aria-hidden="true">&#x25A3;</span>
+                                    <span class="payment-option__body">
+                                        <strong class="payment-option__name">Chuyển khoản ngân hàng (VietQR)</strong>
+                                        <span class="payment-option__sub">Quét mã QR qua mọi ứng dụng ngân hàng (Mobile Banking)</span>
                                     </span>
                                     <span class="payment-option__check" aria-hidden="true"></span>
                                 </label>
                             </div>
 
-                            <!-- Cash Skeleton Info Box -->
+                            <!-- Cash Info Box -->
                             <div class="payment-skeleton-box" id="cashSkeletonBox">
                                 <p class="payment-skeleton-box__text">
                                     Bạn sẽ thanh toán tổng số tiền <strong><c:out value="${formattedTotal}"/>đ</strong> bằng tiền mặt cho nhân viên giao hàng khi nhận đơn.
                                 </p>
                             </div>
 
-                            <!-- PayPal Skeleton Box -->
-                            <div class="payment-skeleton-box payment-skeleton-box--paypal" id="paypalSkeletonBox" hidden>
-                                <div class="paypal-skeleton-head">
-                                    <span class="paypal-badge">PayPal Checkout (Skeleton)</span>
-                                    <span class="paypal-secure">Bảo mật SSL</span>
-                                </div>
-                                <div class="checkout-form-grid">
-                                    <div class="checkout-field checkout-field--full">
-                                        <label for="paypalEmail">Email tài khoản PayPal</label>
-                                        <input type="email"
-                                               id="paypalEmail"
-                                               placeholder="example@paypal.com">
-                                    </div>
-                                </div>
+                            <!-- VNPay Info Box -->
+                            <div class="payment-skeleton-box" id="vnpayBox" hidden>
                                 <p class="payment-skeleton-box__text">
-                                    Chế độ mô phỏng (Skeleton): Nhấn <strong>Thanh toán ngay</strong> bên phải để xác nhận giao dịch PayPal cho đơn hàng.
+                                    Hệ thống sẽ chuyển hướng an toàn sang <strong>Cổng thanh toán VNPAY</strong> để bạn quét mã QR Pay hoặc nhập thẻ ngân hàng.
+                                </p>
+                            </div>
+
+                            <!-- Bank Transfer Info Box -->
+                            <div class="payment-skeleton-box" id="bankTransferBox" hidden>
+                                <p class="payment-skeleton-box__text">
+                                    Sau khi bấm đặt hàng, hệ thống sẽ tạo mã đơn và hiển thị <strong>mã VietQR động</strong> cùng thông tin tài khoản để bạn chuyển khoản.
                                 </p>
                             </div>
                         </div>
@@ -244,7 +250,7 @@
                             </div>
                             <div class="checkout-summary__row">
                                 <span>Phương thức</span>
-                                <strong id="summaryPaymentLabel">Tiền mặt (Cash)</strong>
+                                <strong id="summaryPaymentLabel">Tiền mặt (COD)</strong>
                             </div>
                         </div>
 
@@ -258,7 +264,7 @@
                         <div class="checkout-error-msg" id="checkoutErrorMsg" hidden></div>
 
                         <button type="submit" class="checkout-pay-btn" id="payOrderBtn">
-                            Thanh toán ngay (<c:out value="${formattedTotal}"/>đ)
+                            Đặt hàng ngay (<c:out value="${formattedTotal}"/>đ)
                         </button>
                     </aside>
                 </form>
@@ -281,12 +287,15 @@
             <div><span>Tổng thanh toán:</span> <strong id="successOrderTotal">---</strong></div>
         </div>
         <div class="checkout-success-actions">
+            <a class="checkout-success-btn checkout-success-btn--primary" id="successViewInvoiceBtn" href="#">
+                Xem hóa đơn & Theo dõi đơn hàng
+            </a>
             <c:if test="${isLoggedIn}">
                 <a class="checkout-success-btn checkout-success-btn--outline" href="${pageContext.request.contextPath}/account/orders">
-                    Xem lịch sử đơn hàng
+                    Lịch sử đơn hàng
                 </a>
             </c:if>
-            <a class="checkout-success-btn checkout-success-btn--primary" href="${pageContext.request.contextPath}/products">
+            <a class="checkout-success-btn checkout-success-btn--outline" href="${pageContext.request.contextPath}/products">
                 Tiếp tục mua sắm
             </a>
         </div>

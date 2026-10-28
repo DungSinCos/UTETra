@@ -25,6 +25,11 @@ public interface OrderRepository extends JpaRepository<CustomerOrder, Long>, Jpa
     @EntityGraph(attributePaths = {"user", "branch"})
     Optional<CustomerOrder> findWithCustomerAndBranchById(Long id);
 
+    @EntityGraph(attributePaths = {"user", "branch"})
+    Optional<CustomerOrder> findByOrderCode(String orderCode);
+
+    Optional<CustomerOrder> findByOrderCodeAndRecipientPhone(String orderCode, String recipientPhone);
+
     @Query("""
             select count(o) from CustomerOrder o
             where (:fromDate is null or o.createdAt >= :fromDate)

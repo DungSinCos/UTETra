@@ -5,6 +5,7 @@ import com.UTETra.app.entity.Branch;
 import com.UTETra.app.entity.Cart;
 import com.UTETra.app.entity.CustomerOrder;
 import com.UTETra.app.entity.OrderItem;
+import com.UTETra.app.entity.PaymentTransaction;
 import com.UTETra.app.entity.Product;
 import com.UTETra.app.entity.User;
 import com.UTETra.app.entity.UserAddress;
@@ -12,9 +13,11 @@ import com.UTETra.app.repository.BranchRepository;
 import com.UTETra.app.repository.CartRepository;
 import com.UTETra.app.repository.OrderItemRepository;
 import com.UTETra.app.repository.OrderRepository;
+import com.UTETra.app.repository.PaymentTransactionRepository;
 import com.UTETra.app.repository.ProductRepository;
 import com.UTETra.app.repository.UserAddressRepository;
 import com.UTETra.app.service.CartService;
+import com.UTETra.app.service.VNPayService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -48,6 +51,8 @@ public class CheckoutController {
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
+    private final PaymentTransactionRepository paymentTransactionRepository;
+    private final VNPayService vnpayService;
 
     public CheckoutController(CartService cartService,
                               UserAddressRepository userAddressRepository,
@@ -55,7 +60,9 @@ public class CheckoutController {
                               CartRepository cartRepository,
                               ProductRepository productRepository,
                               OrderRepository orderRepository,
-                              OrderItemRepository orderItemRepository) {
+                              OrderItemRepository orderItemRepository,
+                              PaymentTransactionRepository paymentTransactionRepository,
+                              VNPayService vnpayService) {
         this.cartService = cartService;
         this.userAddressRepository = userAddressRepository;
         this.branchRepository = branchRepository;
@@ -63,6 +70,8 @@ public class CheckoutController {
         this.productRepository = productRepository;
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
+        this.paymentTransactionRepository = paymentTransactionRepository;
+        this.vnpayService = vnpayService;
     }
 
     @GetMapping
@@ -101,22 +110,22 @@ public class CheckoutController {
         model.addAttribute("defaultRecipientName", defaultRecipientName);
         model.addAttribute("defaultRecipientPhone", defaultRecipientPhone);
 
-        model.addAttribute("checkoutMode", isDirectBuy ? "DIRECT" : "CART");
-        model.addAttribute("directProductId", productId);
-        model.addAttribute("directSize", size != null ? size.trim().toUpperCase() : "S");
-        model.addAttribute("directQuantity", Math.max(1, quantity));
-        model.addAttribute("selectedBranchId", branchId);
-
         model.addAttribute("checkoutItems", summary.items());
-        model.addAttribute("totalQuantity", summary.totalQuantity());
         model.addAttribute("subtotal", summary.subtotal());
         model.addAttribute("deliveryFee", summary.deliveryFee());
         model.addAttribute("total", summary.total());
+        model.addAttribute("totalQuantity", summary.totalQuantity());
 
-        return "checkout"; // -> /WEB-INF/views/checkout.jsp
+        model.addAttribute("checkoutMode", isDirectBuy ? "DIRECT" : "CART");
+        model.addAttribute("directProductId", productId);
+        model.addAttribute("directSize", size);
+        model.addAttribute("directQuantity", quantity);
+        model.addAttribute("selectedBranchId", branchId);
+
+        return "checkout";
     }
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @Transactional
     public ResponseEntity<Map<String, Object>> placeOrder(
@@ -132,8 +141,8 @@ public class CheckoutController {
             @RequestParam(required = false) String ward,
             @RequestParam(required = false) String district,
             @RequestParam(required = false) String city,
-            @RequestParam(defaultValue = "CASH") String paymentMethod,
             @RequestParam(required = false) String note,
+            @RequestParam(defaultValue = "CASH") String paymentMethod,
             HttpServletRequest request) {
 
         User user = getCurrentUser(request);
@@ -145,7 +154,7 @@ public class CheckoutController {
 
         if (summary.items().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("success", false, "message", "Không có sản phẩm nào để thanh toán"));
+                    .body(Map.of("success", false, "message", "Đơn hàng của bạn không có sản phẩm nào"));
         }
 
         String finalName;
@@ -205,7 +214,19 @@ public class CheckoutController {
                     .body(Map.of("success", false, "message", "Hiện chưa có chi nhánh hoạt động để xử lý đơn hàng"));
         }
 
-        boolean isPaypal = "PAYPAL".equalsIgnoreCase(paymentMethod);
+        CustomerOrder.PaymentMethod selectedMethod;
+        PaymentTransaction.Provider provider;
+        if ("VNPAY".equalsIgnoreCase(paymentMethod)) {
+            selectedMethod = CustomerOrder.PaymentMethod.VNPAY;
+            provider = PaymentTransaction.Provider.VNPAY;
+        } else if ("BANK_TRANSFER".equalsIgnoreCase(paymentMethod) || "PAYPAL".equalsIgnoreCase(paymentMethod)) {
+            selectedMethod = CustomerOrder.PaymentMethod.BANK_TRANSFER;
+            provider = PaymentTransaction.Provider.BANK_TRANSFER;
+        } else {
+            selectedMethod = CustomerOrder.PaymentMethod.COD;
+            provider = PaymentTransaction.Provider.COD;
+        }
+
         CustomerOrder order = new CustomerOrder();
         order.setOrderCode(generateOrderCode());
         order.setUser(user);
@@ -218,8 +239,8 @@ public class CheckoutController {
         order.setShippingFee(summary.deliveryFee());
         order.setDiscountAmount(BigDecimal.ZERO);
         order.setTotalAmount(summary.total());
-        order.setPaymentMethod(isPaypal ? CustomerOrder.PaymentMethod.BANK_TRANSFER : CustomerOrder.PaymentMethod.COD);
-        order.setPaymentStatus(isPaypal ? CustomerOrder.PaymentStatus.PAID : CustomerOrder.PaymentStatus.UNPAID);
+        order.setPaymentMethod(selectedMethod);
+        order.setPaymentStatus(CustomerOrder.PaymentStatus.UNPAID);
         order.setOrderStatus(CustomerOrder.OrderStatus.PENDING);
         order.setNote(note != null && !note.isBlank() ? note.trim() : null);
 
@@ -241,16 +262,32 @@ public class CheckoutController {
             orderItemRepository.save(orderItem);
         }
 
+        PaymentTransaction pt = new PaymentTransaction();
+        pt.setOrder(savedOrder);
+        pt.setProvider(provider);
+        pt.setAmount(savedOrder.getTotalAmount());
+        pt.setStatus(PaymentTransaction.Status.PENDING);
+        pt.setTransactionRef(savedOrder.getOrderCode() + "-P1");
+        paymentTransactionRepository.save(pt);
+
         if (!isDirectBuy && user != null) {
             cartService.clearUserCart(user.getId());
         }
 
+        String redirectUrl;
+        if (selectedMethod == CustomerOrder.PaymentMethod.VNPAY) {
+            redirectUrl = vnpayService.createPaymentUrl(savedOrder, request);
+        } else {
+            redirectUrl = request.getContextPath() + "/orders/" + savedOrder.getOrderCode();
+        }
+
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("success", true);
-        response.put("message", "Thanh toán và đặt hàng thành công!");
+        response.put("message", "Đặt hàng thành công!");
         response.put("orderCode", savedOrder.getOrderCode());
-        response.put("paymentMethod", isPaypal ? "PayPal" : "Tiền mặt (COD)");
+        response.put("paymentMethod", selectedMethod.getLabel());
         response.put("total", summary.total().longValue());
+        response.put("redirectUrl", redirectUrl);
         return ResponseEntity.ok(response);
     }
 

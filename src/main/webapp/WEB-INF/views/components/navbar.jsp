@@ -17,6 +17,12 @@
                 <a class="nav-item" href="${pageContext.request.contextPath}/about" data-path="/about">Về UTETra</a>
                 <a class="nav-item" href="${pageContext.request.contextPath}/support" data-path="/support">Hỗ Trợ</a>
                 <a class="nav-item" href="${pageContext.request.contextPath}/cart" data-path="/cart">Giỏ hàng</a>
+
+                <%-- Chỉ khi đăng nhập thì mới hiển thị Quản lý đơn hàng --%>
+                <c:if test="${not empty currentUser}">
+                    <a class="nav-item" href="${pageContext.request.contextPath}/account/orders" data-path="/account/orders">Quản lý đơn hàng</a>
+                </c:if>
+
                 <c:if test="${currentUserRole == 'ADMIN' || currentUserRole == 'MANAGER'}">
                     <a class="nav-item" href="${pageContext.request.contextPath}/admin/dashboard" data-path="/admin">Quản trị</a>
                 </c:if>
@@ -32,7 +38,7 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end profile-dropdown-menu" aria-labelledby="profileDropdown">
                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/account/profile">Thông tin cá nhân</a></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/account/orders">Lịch sử mua hàng</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/account/orders">Quản lý đơn hàng</a></li>
                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/account/change-password">Đổi mật khẩu</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item profile-dropdown-logout" href="${pageContext.request.contextPath}/logout">Đăng xuất</a></li>
