@@ -18,6 +18,10 @@
            href="${pageContext.request.contextPath}/admin/categories">
             Quản lý danh mục
         </a>
+        <a class="admin-nav-link ${pageContext.request.requestURI.contains('/admin/branches') ? 'is-active' : ''}"
+           href="${pageContext.request.contextPath}/admin/branches">
+            Quản lý chi nhánh
+        </a>
         <c:if test="${currentUserRole == 'ADMIN'}">
             <a class="admin-nav-link ${pageContext.request.requestURI.contains('/admin/users') ? 'is-active' : ''}"
                href="${pageContext.request.contextPath}/admin/users">

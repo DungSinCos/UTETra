@@ -14,6 +14,7 @@
             <nav class="nav-menu">
                 <a class="nav-item" href="${pageContext.request.contextPath}/" data-path="/">Trang chủ</a>
                 <a class="nav-item" href="${pageContext.request.contextPath}/products" data-path="/products">Thực Đơn</a>
+                <a class="nav-item" href="${pageContext.request.contextPath}/branches" data-path="/branches">Chi nhánh</a>
                 <a class="nav-item" href="${pageContext.request.contextPath}/about" data-path="/about">Về UTETra</a>
                 <a class="nav-item" href="${pageContext.request.contextPath}/support" data-path="/support">Hỗ Trợ</a>
 

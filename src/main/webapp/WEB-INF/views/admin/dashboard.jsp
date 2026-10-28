@@ -137,6 +137,15 @@
                     <p class="admin-action-card__desc">Thêm nhóm trà mới, điều chỉnh thứ tự hiển thị danh mục trên thanh lọc.</p>
                 </a>
             </div>
+            <div class="col-md-6 col-lg-4">
+                <a class="admin-action-card" href="${pageContext.request.contextPath}/admin/branches">
+                    <div class="admin-action-card__title">
+                        Quản lý chi nhánh
+                        <span style="color:var(--ut-primary, #7b4a2b);">&rarr;</span>
+                    </div>
+                    <p class="admin-action-card__desc">Xem danh sách, thêm chi nhánh mới, sửa thông tin và bật/tắt hoạt động cửa hàng.</p>
+                </a>
+            </div>
             <c:if test="${currentUserRole == 'ADMIN'}">
                 <div class="col-md-6 col-lg-4">
                     <a class="admin-action-card" href="${pageContext.request.contextPath}/admin/users">
