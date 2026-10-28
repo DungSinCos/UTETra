@@ -71,8 +71,7 @@ public class SecurityConfig {
                         response.setCharacterEncoding("UTF-8");
                         response.getWriter().write("{\"success\":false,\"message\":\"Bạn không có quyền truy cập trang này\"}");
                     } else {
-                        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                        request.getRequestDispatcher("/WEB-INF/views/error/403.jsp").forward(request, response);
+                        response.sendRedirect(request.getContextPath() + "/403");
                     }
                 })
             )

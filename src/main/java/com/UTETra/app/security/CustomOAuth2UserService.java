@@ -83,7 +83,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         if ((user.getFullName() == null || user.getFullName().isBlank()) && name != null) {
             user.setFullName(name);
         }
-        String avatar = stringAttribute(attributes, "picture");
+        String avatar = resolveAvatar(attributes);
         if (avatar != null && (user.getAvatarUrl() == null || user.getAvatarUrl().isBlank())) {
             user.setAvatarUrl(avatar);
         }
@@ -103,6 +103,21 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private String stringAttribute(Map<String, Object> attributes, String key) {
         Object value = attributes.get(key);
         return value instanceof String text ? text : null;
+    }
+
+    private String resolveAvatar(Map<String, Object> attributes) {
+        Object picture = attributes.get("picture");
+        if (picture instanceof String url && !url.isBlank()) {
+            return url;
+        }
+        // Facebook Graph API returns {"picture": {"data": {"url": "https://..."}}}
+        if (picture instanceof Map<?, ?> pictureMap) {
+            Object data = pictureMap.get("data");
+            if (data instanceof Map<?, ?> dataMap && dataMap.get("url") instanceof String url && !url.isBlank()) {
+                return url;
+            }
+        }
+        return null;
     }
 
     private String resolveName(Map<String, Object> attributes, String email) {
