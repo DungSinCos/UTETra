@@ -74,4 +74,16 @@ public class OrderItem {
     public BigDecimal getLineTotal() { return lineTotal; }
     public String getNote() { return note; }
     public List<OrderItemTopping> getToppings() { return toppings; }
+
+    public void setOrder(CustomerOrder order) { this.order = order; }
+    public void setProduct(Product product) { this.product = product; }
+    public void setProductName(String productName) { this.productName = productName; }
+    public void setSizeName(String sizeName) { this.sizeName = sizeName; }
+    public void setSugarLevel(String sugarLevel) { this.sugarLevel = sugarLevel; }
+    public void setIceLevel(String iceLevel) { this.iceLevel = iceLevel; }
+    public void setUnitPrice(BigDecimal unitPrice) { this.unitPrice = unitPrice; }
+    public void setToppingTotalPrice(BigDecimal toppingTotalPrice) { this.toppingTotalPrice = toppingTotalPrice; }
+    public void setQuantity(int quantity) { this.quantity = quantity; }
+    public void setLineTotal(BigDecimal lineTotal) { this.lineTotal = lineTotal; }
+    public void setNote(String note) { this.note = note; }
 }

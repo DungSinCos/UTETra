@@ -128,7 +128,23 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     if (buyNowBtn) {
         buyNowBtn.addEventListener("click", function () {
-            sendAddToCart(buyNowBtn, true);
+            var productId = buyNowBtn.getAttribute("data-product-id");
+            if (!productId) {
+                return;
+            }
+            var selectedSizeBtn = document.querySelector(".size-box.is-selected[data-size]");
+            var selectedBranchBtn = document.querySelector(".branch-box.is-selected[data-branch-id]");
+            var size = selectedSizeBtn ? selectedSizeBtn.getAttribute("data-size") : "S";
+            var branchId = selectedBranchBtn ? selectedBranchBtn.getAttribute("data-branch-id") : "";
+
+            var params = new URLSearchParams();
+            params.append("productId", productId);
+            params.append("size", size);
+            params.append("quantity", "1");
+            if (branchId) {
+                params.append("branchId", branchId);
+            }
+            window.location.href = base + "/checkout?" + params.toString();
         });
     }
 });

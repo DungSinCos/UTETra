@@ -22,4 +22,8 @@ public interface CartService {
     CartSummary updateItemQuantity(Long userId, Long itemId, int quantity);
 
     CartSummary removeItem(Long userId, Long itemId);
+
+    CartSummary getDirectProductSummary(Long productId, String sizeName, int quantity);
+
+    void clearUserCart(Long userId);
 }

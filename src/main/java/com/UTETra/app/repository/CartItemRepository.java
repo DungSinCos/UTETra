@@ -13,4 +13,6 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
     Optional<CartItem> findByCartIdAndProductIdAndSizeName(Long cartId, Long productId, String sizeName);
 
     Optional<CartItem> findByIdAndCartId(Long id, Long cartId);
+
+    void deleteByCartId(Long cartId);
 }
