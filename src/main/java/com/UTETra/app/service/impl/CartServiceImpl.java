@@ -138,6 +138,56 @@ public class CartServiceImpl implements CartService {
         return buildSummary(cart.getId());
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public CartSummary getDirectProductSummary(Long productId, String sizeName, int quantity) {
+        if (productId == null) {
+            return emptySummary();
+        }
+        Optional<Product> productOpt = productRepository.findById(productId).filter(Product::isActive);
+        if (productOpt.isEmpty()) {
+            return emptySummary();
+        }
+        Product product = productOpt.get();
+        String normalizedSize = normalizeSize(sizeName);
+        int safeQty = Math.max(1, quantity);
+
+        BigDecimal basePrice = product.getBasePrice() != null ? product.getBasePrice() : BigDecimal.ZERO;
+        BigDecimal extraPrice = productSizeRepository
+                .findByProductIdAndSizeName(product.getId(), normalizedSize)
+                .map(ProductSize::getExtraPrice)
+                .orElse(BigDecimal.ZERO);
+
+        BigDecimal unitPrice = basePrice.add(extraPrice);
+        BigDecimal lineTotal = unitPrice.multiply(BigDecimal.valueOf(safeQty));
+
+        CartItemView itemView = new CartItemView(
+                null,
+                product.getId(),
+                product.getName(),
+                product.getImageUrl(),
+                normalizedSize,
+                safeQty,
+                unitPrice,
+                lineTotal
+        );
+
+        BigDecimal deliveryFee = DEFAULT_DELIVERY_FEE;
+        BigDecimal total = lineTotal.add(deliveryFee);
+
+        return new CartSummary(List.of(itemView), safeQty, lineTotal, deliveryFee, total);
+    }
+
+    @Override
+    @Transactional
+    public void clearUserCart(Long userId) {
+        if (userId == null) {
+            return;
+        }
+        cartRepository.findByUserId(userId)
+                .ifPresent(cart -> cartItemRepository.deleteByCartId(cart.getId()));
+    }
+
     private CartSummary buildSummary(Long cartId) {
         List<CartItem> rows = cartItemRepository.findByCartIdOrderByIdAsc(cartId);
         if (rows.isEmpty()) {

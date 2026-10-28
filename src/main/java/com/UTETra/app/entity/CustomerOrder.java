@@ -132,5 +132,20 @@ public class CustomerOrder {
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
 
+    public void setOrderCode(String orderCode) { this.orderCode = orderCode; }
+    public void setUser(User user) { this.user = user; }
+    public void setBranch(Branch branch) { this.branch = branch; }
+    public void setVoucherId(Long voucherId) { this.voucherId = voucherId; }
+    public void setOrderType(OrderType orderType) { this.orderType = orderType; }
+    public void setRecipientName(String recipientName) { this.recipientName = recipientName; }
+    public void setRecipientPhone(String recipientPhone) { this.recipientPhone = recipientPhone; }
+    public void setShippingAddress(String shippingAddress) { this.shippingAddress = shippingAddress; }
+    public void setSubtotalAmount(BigDecimal subtotalAmount) { this.subtotalAmount = subtotalAmount; }
+    public void setShippingFee(BigDecimal shippingFee) { this.shippingFee = shippingFee; }
+    public void setDiscountAmount(BigDecimal discountAmount) { this.discountAmount = discountAmount; }
+    public void setTotalAmount(BigDecimal totalAmount) { this.totalAmount = totalAmount; }
+    public void setPaymentMethod(PaymentMethod paymentMethod) { this.paymentMethod = paymentMethod; }
+    public void setPaymentStatus(PaymentStatus paymentStatus) { this.paymentStatus = paymentStatus; }
     public void setOrderStatus(OrderStatus orderStatus) { this.orderStatus = orderStatus; }
+    public void setNote(String note) { this.note = note; }
 }
