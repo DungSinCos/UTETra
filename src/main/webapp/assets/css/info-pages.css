@@ -8,7 +8,7 @@
     --info-muted: var(--ut-muted, #7d6a5d);
     color: var(--info-text);
     background: #fffdf9;
-    padding-bottom: 4rem;
+    padding-bottom: 5rem;
 }
 .info-container { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
 .eyebrow { display: inline-block; color: #9a6844; font-size: .76rem; font-weight: 700; letter-spacing: .13em; margin-bottom: 1rem; }
@@ -27,7 +27,7 @@
 .about-cup { position: relative; z-index: 1; font-size: clamp(8rem, 17vw, 13rem); filter: drop-shadow(0 20px 15px #70452d24); transform: rotate(-7deg); }
 .floating-note { position: absolute; z-index: 2; right: 0; bottom: 1.3rem; display: flex; flex-direction: column; gap: .15rem; max-width: 230px; padding: 1rem 1.2rem; border: 1px solid #f0e4d8; border-radius: 14px; background: #fff; box-shadow: 0 12px 35px #4d2d1b12; }
 .floating-note strong { font-size: .9rem; }.floating-note span { color: var(--info-muted); font-size: .76rem; }
-.story-section { padding-top: 4.5rem; padding-bottom: 4.5rem; }
+.story-section { padding-top: 4.5rem; padding-bottom: 2rem; }
 .section-heading { max-width: 680px; text-align: center; margin: 0 auto 2rem; }
 .section-heading p { margin-bottom: 0; }
 .value-grid, .contact-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.2rem; }
@@ -35,10 +35,54 @@
 .value-icon, .contact-icon { display: grid; place-items: center; width: 52px; height: 52px; margin-bottom: 1.1rem; border-radius: 15px; background: var(--info-cream); color: var(--info-brown); font-size: 1.6rem; }
 .value-card h3, .contact-card h3 { font-size: 1.08rem; font-weight: 750; margin-bottom: .55rem; }
 .value-card p, .contact-card p { margin-bottom: 0; font-size: .92rem; }
-.about-promise { background: var(--info-brown-dark); color: #fff; padding: 3rem 0; }
-.promise-inner { display: flex; align-items: center; justify-content: space-between; gap: 2rem; }
-.promise-inner h2 { margin-bottom: .6rem; }.promise-inner p { color: #ead8c9; margin-bottom: 0; }.eyebrow-light { color: #eac6a6; }
-.info-button-light { background: #fff; color: var(--info-brown-dark) !important; white-space: nowrap; }.info-button-light:hover { background: #f8e7d7; color: var(--info-brown-dark) !important; }
+
+/* Lời hứa từ UTETra - Card thiết kế hài hòa */
+.about-promise-wrap { margin-top: 2rem; }
+.about-promise-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 2.8rem 3.2rem;
+    background: linear-gradient(135deg, #fff9f3 0%, #f8ede2 100%);
+    border: 1.5px solid #ebd8c7;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(123, 74, 43, 0.06);
+    position: relative;
+    overflow: hidden;
+}
+.about-promise-card::before {
+    content: "";
+    position: absolute;
+    right: -30px;
+    bottom: -30px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(233, 161, 91, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
+    pointer-events: none;
+}
+.about-promise-content h2 {
+    font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+    font-weight: 800;
+    color: var(--info-brown-dark);
+    margin: 0 0 .5rem;
+    letter-spacing: -.02em;
+}
+.about-promise-content p {
+    color: var(--info-muted);
+    font-size: .96rem;
+    margin: 0;
+    line-height: 1.6;
+}
+.about-promise-card .info-button {
+    flex-shrink: 0;
+    padding: .9rem 1.6rem;
+    font-size: .95rem;
+    font-weight: 700;
+    box-shadow: 0 6px 18px rgba(123, 74, 43, 0.22);
+}
+
 .support-hero { text-align: center; padding: 4rem 0 3.7rem; background: var(--info-cream); }
 .support-hero-inner { max-width: 800px; }.support-hero p { max-width: 620px; margin: 0 auto 1rem; }
 .contact-section { padding-top: 3.5rem; padding-bottom: 4rem; }
@@ -53,6 +97,6 @@
 @media (max-width: 760px) {
     .about-hero { padding: 3rem 0; }.about-hero-grid, .faq-layout { grid-template-columns: 1fr; gap: 2rem; }
     .about-visual { min-height: 260px; }.about-cup { font-size: 9rem; }.floating-note { right: 2%; bottom: .2rem; }
-    .value-grid, .contact-grid { grid-template-columns: 1fr; }.promise-inner, .support-cta { align-items: flex-start; flex-direction: column; }
+    .value-grid, .contact-grid { grid-template-columns: 1fr; }.about-promise-card, .support-cta { align-items: flex-start; flex-direction: column; padding: 2rem; }
     .story-section, .contact-section { padding-top: 3rem; padding-bottom: 3rem; }.faq-section { padding: 3rem 0; }
 }
