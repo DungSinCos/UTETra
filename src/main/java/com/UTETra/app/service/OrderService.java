@@ -24,6 +24,8 @@ public interface OrderService {
 
     void updateStatus(Long id, CustomerOrder.OrderStatus targetStatus);
 
+    void confirmOfflinePayment(Long id);
+
     void customerCancelOrder(String orderCode, Long userId, String recipientPhone);
 
     void customerConfirmReceived(String orderCode, Long userId, String recipientPhone);

@@ -80,4 +80,15 @@ public class AdminOrderController {
         }
         return "redirect:/admin/orders/" + id;
     }
+
+    @PostMapping("/{id}/payment/confirm")
+    public String confirmOfflinePayment(@PathVariable Long id, RedirectAttributes redirect) {
+        try {
+            orderService.confirmOfflinePayment(id);
+            redirect.addFlashAttribute("message", "Đã xác nhận thanh toán chuyển khoản; doanh thu được ghi nhận theo ngày thanh toán.");
+        } catch (IllegalArgumentException ex) {
+            redirect.addFlashAttribute("error", ex.getMessage());
+        }
+        return "redirect:/admin/orders/" + id;
+    }
 }

@@ -401,6 +401,18 @@
     border-color: var(--ut-primary);
 }
 
+.voucher-apply-btn:disabled {
+    cursor: wait;
+    opacity: .65;
+}
+
+.voucher-feedback {
+    min-height: 1.25rem;
+    margin: 6px 2px 0;
+    color: var(--ut-muted);
+    font-size: .78rem;
+}
+
 /* Checkout Button */
 .checkout-btn {
     display: flex;

@@ -3,6 +3,7 @@ package com.UTETra.app.controller;
 import com.UTETra.app.dto.CartItemView;
 import com.UTETra.app.entity.User;
 import com.UTETra.app.service.CartService;
+import com.UTETra.app.service.VoucherService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,22 +27,66 @@ import java.util.Map;
 public class CartController {
 
     private final CartService cartService;
+    private final VoucherService voucherService;
 
-    public CartController(CartService cartService) {
+    public CartController(CartService cartService, VoucherService voucherService) {
         this.cartService = cartService;
+        this.voucherService = voucherService;
     }
 
     @GetMapping
     public String cart(HttpServletRequest request, Model model) {
         User user = getCurrentUser(request);
         CartService.CartSummary summary = cartService.getCartSummary(user != null ? user.getId() : null);
+        String voucherCode = (String) request.getSession().getAttribute("appliedVoucherCode");
+        VoucherService.Quote voucherQuote = null;
+        if (voucherCode != null && !summary.items().isEmpty()) {
+            try {
+                voucherQuote = voucherService.quote(voucherCode, summary.subtotal(), summary.deliveryFee());
+            } catch (IllegalArgumentException ex) {
+                request.getSession().removeAttribute("appliedVoucherCode");
+                voucherCode = null;
+            }
+        } else if (summary.items().isEmpty()) {
+            request.getSession().removeAttribute("appliedVoucherCode");
+            voucherCode = null;
+        }
 
         model.addAttribute("cartItems", summary.items());
         model.addAttribute("subtotal", summary.subtotal());
         model.addAttribute("deliveryFee", summary.deliveryFee());
-        model.addAttribute("total", summary.total());
+        model.addAttribute("voucherCode", voucherCode);
+        model.addAttribute("voucherDiscount", voucherQuote != null ? voucherQuote.discount() : BigDecimal.ZERO);
+        model.addAttribute("voucherMessage", voucherQuote != null ? voucherQuote.description() : null);
+        model.addAttribute("total", voucherQuote != null ? voucherQuote.total() : summary.total());
         model.addAttribute("isGuest", user == null);
         return "cart"; // -> /WEB-INF/views/cart.jsp
+    }
+
+    @PostMapping(value = "/voucher/apply", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> applyVoucher(@RequestParam String code, HttpServletRequest request) {
+        User user = getCurrentUser(request);
+        CartService.CartSummary summary = cartService.getCartSummary(user != null ? user.getId() : null);
+        if (code == null || code.isBlank()) {
+            request.getSession().removeAttribute("appliedVoucherCode");
+            return ResponseEntity.ok(Map.of("success", true, "code", "", "description", "Đã bỏ mã giảm giá.",
+                    "discount", 0L, "total", summary.total().longValue()));
+        }
+        if (summary.items().isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("success", false, "message", "Thêm sản phẩm vào giỏ trước khi dùng mã.",
+                    "total", summary.total().longValue()));
+        }
+        try {
+            VoucherService.Quote quote = voucherService.quote(code, summary.subtotal(), summary.deliveryFee());
+            request.getSession().setAttribute("appliedVoucherCode", quote.code());
+            return ResponseEntity.ok(Map.of("success", true, "code", quote.code(), "description", quote.description(),
+                    "discount", quote.discount().longValue(), "total", quote.total().longValue()));
+        } catch (IllegalArgumentException ex) {
+            request.getSession().removeAttribute("appliedVoucherCode");
+            return ResponseEntity.badRequest().body(Map.of("success", false, "message", ex.getMessage(),
+                    "total", summary.total().longValue()));
+        }
     }
 
     /**

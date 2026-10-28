@@ -72,6 +72,10 @@
                         <span class="summary-label">Phí giao hàng (Delivery Fee)</span>
                         <span class="summary-value" data-summary-delivery data-delivery-fee="15000"><c:out value="${formattedDeliveryFee}"/>đ</span>
                     </div>
+                    <div class="summary-row" data-voucher-discount-row ${empty voucherCode ? 'hidden' : ''}>
+                        <span class="summary-label">Giảm giá (<c:out value="${voucherCode}"/>)</span>
+                        <span class="summary-value" data-summary-discount>-<fmt:formatNumber value="${voucherDiscount}" type="number" maxFractionDigits="0"/>đ</span>
+                    </div>
                 </div>
 
                 <div class="summary-divider"></div>
@@ -89,9 +93,11 @@
                                id="voucherInput"
                                name="voucherCode"
                                class="voucher-input"
+                               value="<c:out value='${voucherCode}'/>"
                                placeholder="Nhập mã giảm giá...">
                         <button type="button" class="voucher-apply-btn" data-voucher-apply>Áp dụng</button>
                     </div>
+                    <p class="voucher-feedback" data-voucher-feedback aria-live="polite"><c:out value="${voucherMessage}"/></p>
                 </div>
 
                 <!-- Checkout button mapped to /checkout -->

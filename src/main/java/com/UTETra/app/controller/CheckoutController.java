@@ -18,6 +18,7 @@ import com.UTETra.app.repository.ProductRepository;
 import com.UTETra.app.repository.UserAddressRepository;
 import com.UTETra.app.service.CartService;
 import com.UTETra.app.service.VNPayService;
+import com.UTETra.app.service.VoucherService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -53,6 +54,7 @@ public class CheckoutController {
     private final OrderItemRepository orderItemRepository;
     private final PaymentTransactionRepository paymentTransactionRepository;
     private final VNPayService vnpayService;
+    private final VoucherService voucherService;
 
     public CheckoutController(CartService cartService,
                               UserAddressRepository userAddressRepository,
@@ -62,7 +64,8 @@ public class CheckoutController {
                               OrderRepository orderRepository,
                               OrderItemRepository orderItemRepository,
                               PaymentTransactionRepository paymentTransactionRepository,
-                              VNPayService vnpayService) {
+                              VNPayService vnpayService,
+                              VoucherService voucherService) {
         this.cartService = cartService;
         this.userAddressRepository = userAddressRepository;
         this.branchRepository = branchRepository;
@@ -72,6 +75,7 @@ public class CheckoutController {
         this.orderItemRepository = orderItemRepository;
         this.paymentTransactionRepository = paymentTransactionRepository;
         this.vnpayService = vnpayService;
+        this.voucherService = voucherService;
     }
 
     @GetMapping
@@ -80,6 +84,7 @@ public class CheckoutController {
             @RequestParam(defaultValue = "S") String size,
             @RequestParam(defaultValue = "1") int quantity,
             @RequestParam(required = false) Long branchId,
+            @RequestParam(required = false) String voucherCode,
             HttpServletRequest request,
             Model model) {
 
@@ -95,6 +100,17 @@ public class CheckoutController {
         CartService.CartSummary summary = isDirectBuy
                 ? cartService.getDirectProductSummary(productId, size, quantity)
                 : cartService.getCartSummary(isLoggedIn ? user.getId() : null);
+        VoucherService.Quote voucherQuote = null;
+        String appliedVoucherCode = null;
+        String voucherError = null;
+        if (!isDirectBuy && voucherCode != null && !voucherCode.isBlank()) {
+            try {
+                voucherQuote = voucherService.quote(voucherCode, summary.subtotal(), summary.deliveryFee());
+                appliedVoucherCode = voucherQuote.code();
+            } catch (IllegalArgumentException ex) {
+                voucherError = ex.getMessage();
+            }
+        }
 
         String defaultRecipientName = currentAddress != null
                 ? currentAddress.getRecipientName()
@@ -113,7 +129,10 @@ public class CheckoutController {
         model.addAttribute("checkoutItems", summary.items());
         model.addAttribute("subtotal", summary.subtotal());
         model.addAttribute("deliveryFee", summary.deliveryFee());
-        model.addAttribute("total", summary.total());
+        model.addAttribute("voucherCode", appliedVoucherCode);
+        model.addAttribute("voucherDiscount", voucherQuote != null ? voucherQuote.discount() : BigDecimal.ZERO);
+        model.addAttribute("voucherError", voucherError);
+        model.addAttribute("total", voucherQuote != null ? voucherQuote.total() : summary.total());
         model.addAttribute("totalQuantity", summary.totalQuantity());
 
         model.addAttribute("checkoutMode", isDirectBuy ? "DIRECT" : "CART");
@@ -142,6 +161,7 @@ public class CheckoutController {
             @RequestParam(required = false) String district,
             @RequestParam(required = false) String city,
             @RequestParam(required = false) String note,
+            @RequestParam(required = false) String voucherCode,
             @RequestParam(defaultValue = "CASH") String paymentMethod,
             HttpServletRequest request) {
 
@@ -156,6 +176,17 @@ public class CheckoutController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("success", false, "message", "Đơn hàng của bạn không có sản phẩm nào"));
         }
+
+        VoucherService.Quote voucherQuote = null;
+        if (!isDirectBuy && voucherCode != null && !voucherCode.isBlank()) {
+            try {
+                voucherQuote = voucherService.quote(voucherCode, summary.subtotal(), summary.deliveryFee());
+            } catch (IllegalArgumentException ex) {
+                return ResponseEntity.badRequest().body(Map.of("success", false, "message", ex.getMessage()));
+            }
+        }
+        BigDecimal discountAmount = voucherQuote != null ? voucherQuote.discount() : BigDecimal.ZERO;
+        BigDecimal orderTotal = voucherQuote != null ? voucherQuote.total() : summary.total();
 
         String finalName;
         String finalPhone;
@@ -237,13 +268,17 @@ public class CheckoutController {
         order.setShippingAddress(finalShippingAddress);
         order.setSubtotalAmount(summary.subtotal());
         order.setShippingFee(summary.deliveryFee());
-        order.setDiscountAmount(BigDecimal.ZERO);
-        order.setTotalAmount(summary.total());
+        order.setDiscountAmount(discountAmount);
+        order.setTotalAmount(orderTotal);
+        if (voucherQuote != null) order.setVoucherId(voucherQuote.voucherId());
         order.setPaymentMethod(selectedMethod);
         order.setPaymentStatus(CustomerOrder.PaymentStatus.UNPAID);
         order.setOrderStatus(CustomerOrder.OrderStatus.PENDING);
         order.setNote(note != null && !note.isBlank() ? note.trim() : null);
 
+        if (voucherQuote != null && !voucherService.consume(voucherQuote.voucherId())) {
+            return ResponseEntity.badRequest().body(Map.of("success", false, "message", "Mã giảm giá vừa hết lượt sử dụng. Vui lòng thử mã khác."));
+        }
         CustomerOrder savedOrder = orderRepository.save(order);
 
         for (CartItemView itemView : summary.items()) {
@@ -273,6 +308,7 @@ public class CheckoutController {
         if (!isDirectBuy && user != null) {
             cartService.clearUserCart(user.getId());
         }
+        if (voucherQuote != null) request.getSession().removeAttribute("appliedVoucherCode");
 
         String redirectUrl;
         if (selectedMethod == CustomerOrder.PaymentMethod.VNPAY) {
@@ -286,7 +322,7 @@ public class CheckoutController {
         response.put("message", "Đặt hàng thành công!");
         response.put("orderCode", savedOrder.getOrderCode());
         response.put("paymentMethod", selectedMethod.getLabel());
-        response.put("total", summary.total().longValue());
+        response.put("total", orderTotal.longValue());
         response.put("redirectUrl", redirectUrl);
         return ResponseEntity.ok(response);
     }

@@ -116,7 +116,36 @@ public class OrderServiceImpl implements OrderService {
             throw new IllegalArgumentException("Đơn đã thanh toán, cần xử lý hoàn tiền trước khi hủy");
         }
         order.setOrderStatus(targetStatus);
+        if (targetStatus == CustomerOrder.OrderStatus.COMPLETED
+                && order.getPaymentMethod() == CustomerOrder.PaymentMethod.COD
+                && order.getPaymentStatus() != CustomerOrder.PaymentStatus.PAID) {
+            markPaid(order);
+        }
         orderRepository.save(order);
+    }
+
+    @Override
+    public void confirmOfflinePayment(Long id) {
+        CustomerOrder order = orderRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Order", id));
+        if (order.getPaymentStatus() == CustomerOrder.PaymentStatus.PAID) {
+            throw new IllegalArgumentException("Đơn hàng đã được xác nhận thanh toán.");
+        }
+        if (order.getPaymentMethod() != CustomerOrder.PaymentMethod.BANK_TRANSFER) {
+            throw new IllegalArgumentException("Chỉ xác nhận thủ công cho đơn chuyển khoản. COD được ghi nhận khi đơn hoàn tất.");
+        }
+        markPaid(order);
+        orderRepository.save(order);
+    }
+
+    private void markPaid(CustomerOrder order) {
+        LocalDateTime paidAt = LocalDateTime.now();
+        order.setPaymentStatus(CustomerOrder.PaymentStatus.PAID);
+        order.setPaidAt(paidAt);
+        paymentTransactionRepository.findTopByOrder_IdOrderByCreatedAtDesc(order.getId()).ifPresent(transaction -> {
+            transaction.setStatus(PaymentTransaction.Status.SUCCESS);
+            transaction.setPaidAt(paidAt);
+        });
     }
 
     @Override
@@ -173,7 +202,7 @@ public class OrderServiceImpl implements OrderService {
 
         order.setOrderStatus(CustomerOrder.OrderStatus.COMPLETED);
         if (order.getPaymentMethod() == CustomerOrder.PaymentMethod.COD && order.getPaymentStatus() == CustomerOrder.PaymentStatus.UNPAID) {
-            order.setPaymentStatus(CustomerOrder.PaymentStatus.PAID);
+            markPaid(order);
         }
         orderRepository.save(order);
     }

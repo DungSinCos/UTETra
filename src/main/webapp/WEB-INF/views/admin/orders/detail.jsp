@@ -55,6 +55,16 @@
                         </div>
                         <div><span class="text-muted">Phương thức:</span> <strong><c:out value="${order.paymentMethod.label}"/></strong></div>
 
+                        <c:if test="${order.paymentStatus.name() != 'PAID' and order.paymentMethod.name() == 'BANK_TRANSFER'}">
+                            <form class="mt-2" method="post" action="${pageContext.request.contextPath}/admin/orders/${order.id}/payment/confirm">
+                                <button class="admin-btn admin-btn--primary" type="submit">Xác nhận đã nhận chuyển khoản</button>
+                                <small class="d-block text-muted mt-1">Chỉ bấm sau khi đã kiểm tra tiền vào tài khoản.</small>
+                            </form>
+                        </c:if>
+                        <c:if test="${order.paymentStatus.name() != 'PAID' and order.paymentMethod.name() == 'COD'}">
+                            <small class="text-muted">COD được ghi nhận là đã thanh toán khi đơn chuyển sang Hoàn tất.</small>
+                        </c:if>
+
                         <c:if test="${not empty nextStatuses}">
                             <div class="mt-3 pt-3" style="border-top:1px dashed var(--ut-border, #f0e2d3);">
                                 <label class="form-label small fw-bold text-muted mb-1">Cập nhật bước tiếp theo:</label>

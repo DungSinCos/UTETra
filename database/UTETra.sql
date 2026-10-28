@@ -228,6 +228,7 @@ CREATE TABLE orders (
     note                VARCHAR(500),
     created_at          DATETIME       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at          DATETIME       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    paid_at             DATETIME       NULL,
     CONSTRAINT fk_order_user    FOREIGN KEY (user_id)    REFERENCES users (id)    ON DELETE SET NULL,
     CONSTRAINT fk_order_branch  FOREIGN KEY (branch_id)  REFERENCES branches (id) ON DELETE RESTRICT,
     CONSTRAINT fk_order_voucher FOREIGN KEY (voucher_id) REFERENCES vouchers (id) ON DELETE SET NULL

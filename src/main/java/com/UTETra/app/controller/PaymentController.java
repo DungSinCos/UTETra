@@ -72,6 +72,7 @@ public class PaymentController {
         transaction.setTransactionRef(transactionRef != null ? transactionRef : "VNP-" + System.currentTimeMillis());
         if (success) {
             order.setPaymentStatus(CustomerOrder.PaymentStatus.PAID);
+            order.setPaidAt(LocalDateTime.now());
             transaction.setStatus(PaymentTransaction.Status.SUCCESS);
             transaction.setPaidAt(LocalDateTime.now());
             orderRepository.save(order);

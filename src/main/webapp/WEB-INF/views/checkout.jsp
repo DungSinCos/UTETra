@@ -4,6 +4,7 @@
 <fmt:setLocale value="vi_VN"/>
 <fmt:formatNumber value="${subtotal != null ? subtotal : 0}" type="number" maxFractionDigits="0" var="formattedSubtotal"/>
 <fmt:formatNumber value="${deliveryFee != null ? deliveryFee : 0}" type="number" maxFractionDigits="0" var="formattedDeliveryFee"/>
+<fmt:formatNumber value="${voucherDiscount != null ? voucherDiscount : 0}" type="number" maxFractionDigits="0" var="formattedVoucherDiscount"/>
 <fmt:formatNumber value="${total != null ? total : 0}" type="number" maxFractionDigits="0" var="formattedTotal"/>
 <!DOCTYPE html>
 <html lang="vi">
@@ -31,6 +32,7 @@
             <c:otherwise>
                 <form id="checkoutForm" class="checkout-layout" novalidate>
                     <input type="hidden" name="checkoutMode" value="<c:out value='${checkoutMode}'/>">
+                    <input type="hidden" name="voucherCode" value="<c:out value='${voucherCode}'/>">
                     <input type="hidden" name="directProductId" value="<c:out value='${directProductId}'/>">
                     <input type="hidden" name="directSize" value="<c:out value='${directSize}'/>">
                     <input type="hidden" name="directQuantity" value="<c:out value='${directQuantity}'/>">
@@ -248,6 +250,12 @@
                                 <span>Phí giao hàng</span>
                                 <strong data-checkout-delivery><c:out value="${formattedDeliveryFee}"/>đ</strong>
                             </div>
+                            <c:if test="${not empty voucherCode}">
+                                <div class="checkout-summary__row">
+                                    <span>Mã <c:out value="${voucherCode}"/></span>
+                                    <strong style="color:#16804a;">-<c:out value="${formattedVoucherDiscount}"/>đ</strong>
+                                </div>
+                            </c:if>
                             <div class="checkout-summary__row">
                                 <span>Phương thức</span>
                                 <strong id="summaryPaymentLabel">Tiền mặt (COD)</strong>
@@ -261,7 +269,7 @@
                             <strong class="checkout-summary__total-val" data-checkout-total><c:out value="${formattedTotal}"/>đ</strong>
                         </div>
 
-                        <div class="checkout-error-msg" id="checkoutErrorMsg" hidden></div>
+                        <div class="checkout-error-msg" id="checkoutErrorMsg" ${empty voucherError ? 'hidden' : ''}><c:out value="${voucherError}"/></div>
 
                         <button type="submit" class="checkout-pay-btn" id="payOrderBtn">
                             Đặt hàng ngay (<c:out value="${formattedTotal}"/>đ)

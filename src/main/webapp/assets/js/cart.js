@@ -8,6 +8,12 @@ document.addEventListener("DOMContentLoaded", function () {
     var deliveryEl = document.querySelector("[data-summary-delivery]");
     var totalEl = document.querySelector("[data-summary-total]");
     var checkoutBtn = document.querySelector("[data-checkout-btn]");
+    var voucherInput = document.getElementById("voucherInput");
+    var voucherApplyBtn = document.querySelector("[data-voucher-apply]");
+    var voucherFeedback = document.querySelector("[data-voucher-feedback]");
+    var voucherDiscountRow = document.querySelector("[data-voucher-discount-row]");
+    var voucherDiscountEl = document.querySelector("[data-summary-discount]");
+    var voucherCode = voucherInput ? voucherInput.value.trim() : "";
 
     function formatVnd(amount) {
         return Number(amount || 0).toLocaleString("vi-VN") + "đ";
@@ -20,6 +26,60 @@ document.addEventListener("DOMContentLoaded", function () {
         checkoutBtn.classList.toggle("is-disabled", !hasItems);
         checkoutBtn.setAttribute("aria-disabled", hasItems ? "false" : "true");
     }
+
+    function updateCheckoutHref() {
+        if (checkoutBtn) {
+            checkoutBtn.href = contextPath + "/checkout" + (voucherCode ? "?voucherCode=" + encodeURIComponent(voucherCode) : "");
+        }
+    }
+
+    function applyVoucher() {
+        if (!voucherInput || !voucherApplyBtn) return;
+        var code = voucherInput.value.trim();
+        voucherApplyBtn.disabled = true;
+        if (voucherFeedback) voucherFeedback.textContent = "Đang kiểm tra mã...";
+        fetch(contextPath + "/cart/voucher/apply", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+                "Accept": "application/json"
+            },
+            body: new URLSearchParams({ code: code }).toString()
+        })
+            .then(function (res) {
+                return res.json().then(function (data) { return { ok: res.ok, data: data }; });
+            })
+            .then(function (result) {
+                voucherApplyBtn.disabled = false;
+                if (!result.ok || !result.data.success) {
+                    voucherCode = "";
+                    updateCheckoutHref();
+                    if (voucherDiscountRow) voucherDiscountRow.hidden = true;
+                    if (totalEl && typeof result.data.total === "number") totalEl.textContent = formatVnd(result.data.total);
+                    if (voucherDiscountEl) voucherDiscountEl.textContent = "-" + formatVnd(0);
+                    if (voucherFeedback) voucherFeedback.textContent = result.data.message || "Không thể áp dụng mã.";
+                    return;
+                }
+                voucherCode = result.data.code || "";
+                if (voucherDiscountRow) voucherDiscountRow.hidden = !voucherCode;
+                if (voucherDiscountEl) voucherDiscountEl.textContent = "-" + formatVnd(result.data.discount);
+                if (totalEl) totalEl.textContent = formatVnd(result.data.total);
+                if (voucherFeedback) voucherFeedback.textContent = result.data.description || "Đã áp dụng mã giảm giá.";
+                updateCheckoutHref();
+            })
+            .catch(function () {
+                voucherApplyBtn.disabled = false;
+                if (voucherFeedback) voucherFeedback.textContent = "Không thể kết nối để kiểm tra mã. Vui lòng thử lại.";
+            });
+    }
+
+    if (voucherApplyBtn) voucherApplyBtn.addEventListener("click", applyVoucher);
+    if (voucherInput) {
+        voucherInput.addEventListener("keydown", function (event) {
+            if (event.key === "Enter") { event.preventDefault(); applyVoucher(); }
+        });
+    }
+    updateCheckoutHref();
 
     function applyServerSummary(data) {
         var itemCount = typeof data.itemCount === "number"
@@ -83,6 +143,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         qtyEl.textContent = confirmedQty;
                     }
                     applyServerSummary(result.data);
+                    if (voucherCode) applyVoucher();
                 }
             })
             .catch(function () {
@@ -116,6 +177,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (result.data && result.data.success) {
                     item.remove();
                     applyServerSummary(result.data);
+                    if (voucherCode && cartList.querySelector("[data-cart-item]")) applyVoucher();
                 } else {
                     item.removeAttribute("data-busy");
                 }

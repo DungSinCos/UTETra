@@ -112,6 +112,9 @@ public class CustomerOrder {
     @Column(name = "updated_at", insertable = false, updatable = false)
     private LocalDateTime updatedAt;
 
+    @Column(name = "paid_at")
+    private LocalDateTime paidAt;
+
     public Long getId() { return id; }
     public String getOrderCode() { return orderCode; }
     public User getUser() { return user; }
@@ -131,6 +134,7 @@ public class CustomerOrder {
     public String getNote() { return note; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public LocalDateTime getPaidAt() { return paidAt; }
 
     public void setOrderCode(String orderCode) { this.orderCode = orderCode; }
     public void setUser(User user) { this.user = user; }
@@ -148,4 +152,5 @@ public class CustomerOrder {
     public void setPaymentStatus(PaymentStatus paymentStatus) { this.paymentStatus = paymentStatus; }
     public void setOrderStatus(OrderStatus orderStatus) { this.orderStatus = orderStatus; }
     public void setNote(String note) { this.note = note; }
+    public void setPaidAt(LocalDateTime paidAt) { this.paidAt = paidAt; }
 }

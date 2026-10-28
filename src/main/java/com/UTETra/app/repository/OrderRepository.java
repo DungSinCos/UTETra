@@ -51,8 +51,9 @@ public interface OrderRepository extends JpaRepository<CustomerOrder, Long>, Jpa
     @Query("""
             select sum(o.totalAmount) from CustomerOrder o
             where o.paymentStatus = :status
-              and (:fromDate is null or o.createdAt >= :fromDate)
-              and (:toExclusive is null or o.createdAt < :toExclusive)
+              and o.paidAt is not null
+              and (:fromDate is null or o.paidAt >= :fromDate)
+              and (:toExclusive is null or o.paidAt < :toExclusive)
             """)
     BigDecimal sumPaidRevenueInPeriod(@Param("status") CustomerOrder.PaymentStatus status,
                                       @Param("fromDate") LocalDateTime fromDate,

@@ -58,6 +58,8 @@ public class VNPayServiceImpl implements VNPayService {
         formatter.setTimeZone(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
         String createDate = formatter.format(new java.util.Date());
         vnpParams.put("vnp_CreateDate", createDate);
+        vnpParams.put("vnp_ExpireDate", formatter.format(
+                new java.util.Date(System.currentTimeMillis() + 15 * 60 * 1000L)));
 
         // Build sorted query string
         List<String> fieldNames = new ArrayList<>(vnpParams.keySet());
@@ -65,21 +67,23 @@ public class VNPayServiceImpl implements VNPayService {
 
         StringBuilder hashData = new StringBuilder();
         StringBuilder query = new StringBuilder();
+        boolean first = true;
 
-        for (int i = 0; i < fieldNames.size(); i++) {
-            String fieldName = fieldNames.get(i);
+        for (String fieldName : fieldNames) {
             String fieldValue = vnpParams.get(fieldName);
             if (fieldValue != null && !fieldValue.isEmpty()) {
                 String encodedKey = URLEncoder.encode(fieldName, StandardCharsets.US_ASCII);
                 String encodedValue = URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII);
 
-                hashData.append(fieldName).append('=').append(encodedValue);
-                query.append(encodedKey).append('=').append(encodedValue);
-
-                if (i < fieldNames.size() - 1) {
+                // VNPAY v2.1.0 signs the sorted, unencoded key/value pairs. The URL
+                // query string is encoded separately after the signature is computed.
+                if (!first) {
                     hashData.append('&');
                     query.append('&');
                 }
+                hashData.append(fieldName).append('=').append(fieldValue);
+                query.append(encodedKey).append('=').append(encodedValue);
+                first = false;
             }
         }
 
@@ -110,7 +114,9 @@ public class VNPayServiceImpl implements VNPayService {
                 if (!first) {
                     hashData.append('&');
                 }
-                hashData.append(fieldName).append('=').append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
+                // Servlet has already decoded the callback query values. Rebuild
+                // the same raw value string that was signed in createPaymentUrl.
+                hashData.append(fieldName).append('=').append(fieldValue);
                 first = false;
             }
         }
