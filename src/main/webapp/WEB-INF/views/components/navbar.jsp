@@ -17,16 +17,16 @@
                 <a class="nav-item" href="${pageContext.request.contextPath}/branches" data-path="/branches">Chi nhánh</a>
                 <a class="nav-item" href="${pageContext.request.contextPath}/about" data-path="/about">Về UTETra</a>
                 <a class="nav-item" href="${pageContext.request.contextPath}/support" data-path="/support">Hỗ Trợ</a>
-                <a class="nav-item" href="${pageContext.request.contextPath}/cart" data-path="/cart">Giỏ hàng</a>
 
-                <%-- Chỉ khi đăng nhập thì mới hiển thị Quản lý đơn hàng --%>
-                <c:if test="${not empty currentUser}">
-                    <a class="nav-item" href="${pageContext.request.contextPath}/account/orders" data-path="/account/orders">Quản lý đơn hàng</a>
-                </c:if>
+                <%-- Icon Giỏ hàng theo hình vẽ --%>
+                <a class="nav-item nav-item--cart" href="${pageContext.request.contextPath}/cart" data-path="/cart" title="Giỏ hàng" aria-label="Giỏ hàng">
+                    <svg class="nav-cart-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2.5 3.5H5.2L7.3 14.2C7.45 14.9 8.1 15.5 8.8 15.5H18.5C19.2 15.5 19.8 15 20 14.3L21.8 7.5H5.8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="9.5" cy="19.5" r="1.8" fill="currentColor"/>
+                        <circle cx="17.5" cy="19.5" r="1.8" fill="currentColor"/>
+                    </svg>
+                </a>
 
-                <c:if test="${currentUserRole == 'ADMIN' || currentUserRole == 'MANAGER'}">
-                    <a class="nav-item" href="${pageContext.request.contextPath}/admin/dashboard" data-path="/admin">Quản trị</a>
-                </c:if>
             </nav>
 
             <div class="nav-actions">
@@ -41,6 +41,17 @@
                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/account/profile">Thông tin cá nhân</a></li>
                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/account/orders">Quản lý đơn hàng</a></li>
                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/account/change-password">Đổi mật khẩu</a></li>
+
+                                <%-- Option Quản trị: CHỈ hiện khi đăng nhập và có quyền ADMIN hoặc MANAGER --%>
+                                <c:if test="${currentUserRole == 'ADMIN' || currentUserRole == 'MANAGER'}">
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item" href="${pageContext.request.contextPath}/admin/dashboard" style="color:var(--ut-primary, #7b4a2b);font-weight:700;">
+                                            Trang quản trị
+                                        </a>
+                                    </li>
+                                </c:if>
+
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item profile-dropdown-logout" href="${pageContext.request.contextPath}/logout">Đăng xuất</a></li>
                             </ul>

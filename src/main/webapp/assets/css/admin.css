@@ -1,0 +1,241 @@
+/* ============================================================
+   UTETra Admin Portal Styles
+   Theme & Font synchronized with Web Brand System
+   ============================================================ */
+
+.admin-page {
+    padding: 2.5rem 0 5rem;
+    background: linear-gradient(135deg, var(--ut-cream, #fff8f0) 0%, var(--ut-accent-soft, #fbe6cf) 100%);
+    min-height: calc(100vh - var(--ut-header-h, 72px));
+    font-family: var(--ut-font, "Be Vietnam Pro", system-ui, -apple-system, sans-serif);
+    color: var(--ut-text, #2d1e15);
+}
+
+/* Admin Sub Navigation Bar */
+.admin-navbar-wrap {
+    margin-bottom: 2.5rem;
+}
+
+.admin-nav-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--ut-white, #ffffff);
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 1.5px solid var(--ut-border, #f0e2d3);
+    box-shadow: 0 10px 30px rgba(123, 74, 43, 0.08);
+}
+
+.admin-nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--ut-muted, #7d6a5d);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.admin-nav-link:hover {
+    background-color: var(--ut-accent-soft, #fbe6cf);
+    color: var(--ut-primary, #7b4a2b);
+}
+
+.admin-nav-link.is-active {
+    background-color: var(--ut-primary, #7b4a2b);
+    color: var(--ut-white, #ffffff) !important;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(123, 74, 43, 0.28);
+}
+
+.admin-nav-link--store {
+    margin-left: auto;
+    border: 1.5px solid var(--ut-border, #f0e2d3);
+    color: var(--ut-primary, #7b4a2b);
+}
+.admin-nav-link--store:hover {
+    border-color: var(--ut-primary, #7b4a2b);
+    background-color: var(--ut-primary, #7b4a2b);
+    color: #ffffff !important;
+}
+
+/* Admin Header */
+.admin-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1.5px solid var(--ut-border, #f0e2d3);
+}
+
+.admin-header__title {
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: var(--ut-text, #2d1e15);
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+.admin-header__desc {
+    font-size: 0.95rem;
+    color: var(--ut-muted, #7d6a5d);
+    margin-top: 0.35rem;
+}
+
+/* Admin Section Title */
+.admin-section-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--ut-text, #2d1e15);
+    margin: 0 0 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Admin Cards */
+.admin-card {
+    background-color: var(--ut-white, #ffffff);
+    border-radius: 20px;
+    padding: 1.6rem;
+    border: 1.5px solid var(--ut-border, #f0e2d3);
+    box-shadow: 0 15px 35px rgba(123, 74, 43, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    height: 100%;
+}
+
+.admin-card__label {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--ut-muted, #7d6a5d);
+    margin-bottom: 0.4rem;
+}
+
+.admin-card__value {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--ut-text, #2d1e15);
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+}
+
+.admin-card__value--primary {
+    color: var(--ut-primary, #7b4a2b);
+}
+
+.admin-card__value--accent {
+    color: #e9a15b;
+}
+
+.admin-card__value--success {
+    color: #15803d;
+}
+
+.admin-card__value--warning {
+    color: #b45309;
+}
+
+/* Quick Access Action Cards */
+.admin-action-card {
+    display: block;
+    background-color: var(--ut-white, #ffffff);
+    border-radius: 20px;
+    padding: 1.6rem;
+    border: 1.5px solid var(--ut-border, #f0e2d3);
+    box-shadow: 0 15px 35px rgba(123, 74, 43, 0.08);
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.25s ease;
+    height: 100%;
+}
+
+.admin-action-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 45px rgba(123, 74, 43, 0.16);
+    border-color: var(--ut-accent, #e9a15b);
+}
+
+.admin-action-card__title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ut-text, #2d1e15);
+    margin-bottom: 0.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.admin-action-card__desc {
+    font-size: 0.9rem;
+    color: var(--ut-muted, #7d6a5d);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Admin Buttons */
+.admin-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 11px 24px;
+    font-family: inherit;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.92rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    border: none;
+}
+
+.admin-btn--primary {
+    background-color: var(--ut-primary, #7b4a2b);
+    color: #ffffff !important;
+    box-shadow: 0 8px 20px rgba(123, 74, 43, 0.25);
+}
+.admin-btn--primary:hover {
+    background-color: var(--ut-primary-dark, #5a3520);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(123, 74, 43, 0.32);
+}
+
+.admin-btn--outline {
+    background: transparent;
+    border: 1.5px solid var(--ut-primary, #7b4a2b);
+    color: var(--ut-primary, #7b4a2b);
+}
+.admin-btn--outline:hover {
+    background-color: var(--ut-primary, #7b4a2b);
+    color: #ffffff !important;
+    transform: translateY(-1px);
+}
+
+/* Admin Form Inputs */
+.admin-input-date {
+    background-color: var(--ut-cream, #fff8f0);
+    border: 1.5px solid var(--ut-border, #f0e2d3);
+    border-radius: 12px;
+    padding: 6px 14px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    color: var(--ut-text, #2d1e15);
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-input-date:focus {
+    border-color: var(--ut-accent, #e9a15b);
+    box-shadow: 0 0 0 3px rgba(233, 161, 91, 0.2);
+    background-color: #ffffff;
+}

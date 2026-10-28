@@ -3,53 +3,55 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <title>Quản lý chi nhánh - UTETra</title>
+    <title>Quản lý chi nhánh - UTETra Admin</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css">
 </head>
 <body>
-<section class="container py-5">
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
-        <div>
-            <div class="d-flex align-items-center gap-2 mb-1">
-                <a href="${pageContext.request.contextPath}/admin/dashboard" class="btn btn-sm btn-outline-secondary">&larr; Bảng điều khiển</a>
-                <h1 class="h3 mb-0">Quản lý chi nhánh</h1>
+<section class="admin-page">
+    <div class="site-container">
+
+        <%-- Admin Navigation Bar --%>
+        <jsp:include page="/WEB-INF/views/components/admin-nav.jsp"/>
+
+        <%-- Admin Header --%>
+        <div class="admin-header">
+            <div>
+                <h1 class="admin-header__title">Quản lý chi nhánh</h1>
+                <div class="admin-header__desc">
+                    Hệ thống hiện có <strong>${totalCount}</strong> chi nhánh
+                    (<span style="color:#15803d;font-weight:600;">${activeCount} đang hoạt động</span>,
+                     <span style="color:#64748b;font-weight:600;">${inactiveCount} tạm dừng</span>).
+                </div>
             </div>
-            <p class="text-muted mb-0 small">
-                Tổng cộng: <strong>${totalCount}</strong> chi nhánh
-                (<span class="text-success">${activeCount} đang hoạt động</span>,
-                 <span class="text-secondary">${inactiveCount} tạm dừng</span>)
-            </p>
+            <div class="d-flex gap-2">
+                <a class="admin-btn admin-btn--filter" href="${pageContext.request.contextPath}/branches" target="_blank">
+                    Xem trang chi nhánh &#8599;
+                </a>
+                <a class="admin-btn admin-btn--primary" href="${pageContext.request.contextPath}/admin/branches/new">
+                    + Thêm chi nhánh mới
+                </a>
+            </div>
         </div>
-        <div class="d-flex gap-2">
-            <a class="btn btn-outline-primary" href="${pageContext.request.contextPath}/branches" target="_blank">
-                Xem trang khách hàng &nearr;
-            </a>
-            <a class="btn btn-primary" href="${pageContext.request.contextPath}/admin/branches/new">
-                + Thêm chi nhánh mới
-            </a>
-        </div>
-    </div>
 
-    <c:if test="${not empty message}">
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <c:out value="${message}"/>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    </c:if>
+        <c:if test="${not empty message}">
+            <div class="alert alert-success" style="background:#dcfce7;color:#15803d;border-radius:12px;margin-bottom:1.5rem;font-weight:600;">
+                &#10003; <c:out value="${message}"/>
+            </div>
+        </c:if>
 
-    <div class="card shadow-sm border-0">
-        <div class="card-body p-0">
+        <div class="admin-card mb-4" style="padding:1.5rem;">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light">
                     <tr>
-                        <th style="width: 70px" class="text-center">#</th>
-                        <th style="width: 140px">Mã CN</th>
+                        <th style="width: 60px" class="text-center">#</th>
+                        <th style="width: 130px">Mã CN</th>
                         <th>Tên chi nhánh</th>
                         <th>Địa chỉ</th>
                         <th>Quận / Huyện</th>
                         <th>Điện thoại</th>
                         <th style="width: 130px" class="text-center">Trạng thái</th>
-                        <th style="width: 180px" class="text-end pe-3">Thao tác</th>
+                        <th style="width: 160px" class="text-center">Thao tác</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -62,7 +64,7 @@
                                 </span>
                             </td>
                             <td>
-                                <strong><c:out value="${branch.name}"/></strong>
+                                <strong style="color:var(--ut-text, #2d1e15);"><c:out value="${branch.name}"/></strong>
                             </td>
                             <td>
                                 <span class="text-secondary"><c:out value="${branch.addressLine}"/></span>
@@ -73,7 +75,7 @@
                             <td>
                                 <c:choose>
                                     <c:when test="${not empty branch.phone}">
-                                        <a href="tel:${branch.phone}" class="text-decoration-none text-nowrap">
+                                        <a href="tel:${branch.phone}" class="text-decoration-none text-nowrap" style="color:var(--ut-primary, #7b4a2b);">
                                             <c:out value="${branch.phone}"/>
                                         </a>
                                     </c:when>
@@ -85,14 +87,14 @@
                             <td class="text-center">
                                 <c:choose>
                                     <c:when test="${branch.active}">
-                                        <span class="badge text-bg-success">Hoạt động</span>
+                                        <span class="badge text-bg-success">Đang hoạt động</span>
                                     </c:when>
                                     <c:otherwise>
                                         <span class="badge text-bg-secondary">Tạm dừng</span>
                                     </c:otherwise>
                                 </c:choose>
                             </td>
-                            <td class="text-end pe-3 text-nowrap">
+                            <td class="text-center text-nowrap">
                                 <a class="btn btn-sm btn-outline-secondary me-1"
                                    href="${pageContext.request.contextPath}/admin/branches/${branch.id}/edit">
                                     Sửa
@@ -119,10 +121,10 @@
                 </table>
             </div>
         </div>
-    </div>
 
-    <div class="mt-3 text-muted small">
-        * Chi nhánh được tạm dừng thay vì xóa hẳn để bảo toàn dữ liệu lịch sử đơn hàng và báo cáo thống kê.
+        <p class="text-muted small mb-0">
+            * Chi nhánh được tạm dừng thay vì xóa để bảo toàn lịch sử đơn hàng và thống kê hệ thống.
+        </p>
     </div>
 </section>
 </body>

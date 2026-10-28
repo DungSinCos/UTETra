@@ -242,3 +242,26 @@
         width: 100%;
     }
 }
+
+
+/* Cart icon in navigation bar */
+.nav-item--cart {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 14px;
+    line-height: 1;
+}
+
+.nav-cart-icon {
+    width: 22px;
+    height: 22px;
+    color: var(--ut-primary, #7b4a2b);
+    display: block;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.nav-item--cart:hover .nav-cart-icon {
+    transform: scale(1.15);
+    color: var(--ut-primary-dark, #5a3520);
+}
