@@ -430,6 +430,13 @@
     transform: translateY(0);
 }
 
+.checkout-btn.is-disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    pointer-events: none;
+    box-shadow: none;
+}
+
 /* Responsive Breakpoints */
 @media (max-width: 900px) {
     .cart-layout {
