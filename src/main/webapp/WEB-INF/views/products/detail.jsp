@@ -76,10 +76,10 @@
                     </div>
 
                     <div class="detail-actions">
-                        <button type="button" class="detail-btn detail-btn--cart" id="addToCartBtn">
+                        <button type="button" class="detail-btn detail-btn--cart" id="addToCartBtn" data-product-id="${product.id}">
                             Thêm vào giỏ
                         </button>
-                        <button type="button" class="detail-btn detail-btn--buy" id="buyNowBtn">
+                        <button type="button" class="detail-btn detail-btn--buy" id="buyNowBtn" data-product-id="${product.id}">
                             Mua ngay
                         </button>
                     </div>

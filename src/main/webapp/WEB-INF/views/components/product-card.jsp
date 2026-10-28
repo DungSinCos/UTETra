@@ -10,10 +10,10 @@
          data-category="<c:out value='${param.category}'/>"
          data-name="<c:out value='${param.name}'/>"
          data-price="<c:out value='${param.price}'/>"
-         onclick="window.location.href='<c:out value="${productDetailUrl}"/>'"
+         onclick="if(!event.target.closest('[data-add-to-cart]')){window.location.href='<c:out value="${productDetailUrl}"/>';}"
          role="link"
          tabindex="0"
-         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.location.href='<c:out value="${productDetailUrl}"/>';}">
+         onkeydown="if((event.key==='Enter'||event.key===' ')&&!event.target.closest('[data-add-to-cart]')){event.preventDefault();window.location.href='<c:out value="${productDetailUrl}"/>';}">
     <div class="product-thumb">
         <c:if test="${not empty param.badge}">
             <span class="product-badge ${not empty param.badgeClass ? param.badgeClass : ''}"><c:out value="${param.badge}"/></span>
@@ -25,10 +25,11 @@
         <p class="product-desc"><c:out value="${param.desc}"/></p>
         <div class="product-footer">
             <span class="product-price"><c:out value="${param.price}"/></span>
-            <a class="product-add"
-               href="<c:out value='${productDetailUrl}'/>"
-               aria-label="Xem chi tiết <c:out value='${param.name}'/>"
-               onclick="event.stopPropagation();">+</a>
+            <button type="button"
+                    class="product-add"
+                    data-add-to-cart="<c:out value='${param.id}'/>"
+                    data-product-name="<c:out value='${param.name}'/>"
+                    aria-label="Thêm <c:out value='${param.name}'/> vào giỏ hàng">+</button>
         </div>
     </div>
 </article>
