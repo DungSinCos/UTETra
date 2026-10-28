@@ -1,11 +1,11 @@
 /* Trang Về UTETra và Hỗ Trợ */
 .info-page {
-    --info-brown: #70452d;
-    --info-brown-dark: #52311f;
-    --info-cream: #fff8f0;
-    --info-peach: #f5e4d2;
-    --info-text: #39291f;
-    --info-muted: #78685d;
+    --info-brown: var(--ut-primary, #7b4a2b);
+    --info-brown-dark: var(--ut-primary-dark, #5a3520);
+    --info-cream: var(--ut-cream, #fff8f0);
+    --info-peach: var(--ut-accent-soft, #fbe6cf);
+    --info-text: var(--ut-text, #2d1e15);
+    --info-muted: var(--ut-muted, #7d6a5d);
     color: var(--info-text);
     background: #fffdf9;
     padding-bottom: 4rem;
