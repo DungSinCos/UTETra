@@ -51,6 +51,7 @@ public class RegisterService {
         user.setFullName(fullName.trim());
         user.setEmail(normalizedEmail);
         user.setPasswordHash(passwordEncoder.encode(password));
+        user.setAuthProvider(User.AuthProvider.LOCAL);
         user.setRole(User.Role.CUSTOMER);
         user.setStatus(User.Status.ACTIVE);
 

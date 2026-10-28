@@ -45,7 +45,7 @@ public class AuthService {
             passwordEncoder.matches(password, dummyHash);
             throw new BadCredentialsException(MSG_BAD_CREDENTIALS);
         }
-        if (!passwordEncoder.matches(password, user.getPasswordHash())) {
+        if (user.getPasswordHash() == null || !passwordEncoder.matches(password, user.getPasswordHash())) {
             throw new BadCredentialsException(MSG_BAD_CREDENTIALS);
         }
 

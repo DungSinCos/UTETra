@@ -19,6 +19,7 @@ CREATE TABLE users (
     email           VARCHAR(150) NOT NULL UNIQUE,
     phone           VARCHAR(20)  UNIQUE,
     password_hash   VARCHAR(255) NOT NULL,
+    auth_provider   VARCHAR(20)  NOT NULL DEFAULT 'LOCAL',
     avatar_url      VARCHAR(500),
     role            ENUM('CUSTOMER', 'STAFF', 'MANAGER', 'ADMIN') NOT NULL DEFAULT 'CUSTOMER',
     loyalty_points  INT          NOT NULL DEFAULT 0,
@@ -40,6 +41,17 @@ CREATE TABLE user_addresses (
     longitude       DECIMAL(10, 7),
     is_default       BOOLEAN      NOT NULL DEFAULT FALSE,
     CONSTRAINT fk_address_user
+        FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE password_reset_tokens (
+    id              BIGINT AUTO_INCREMENT PRIMARY KEY,
+    token           VARCHAR(36)  NOT NULL UNIQUE,
+    user_id         BIGINT       NOT NULL,
+    expiry_date     DATETIME     NOT NULL,
+    used            BOOLEAN      NOT NULL DEFAULT FALSE,
+    created_at      DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_password_reset_user
         FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 

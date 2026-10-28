@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -13,6 +14,14 @@
                 <h1>Đăng nhập</h1>
                 <p>Nhập thông tin tài khoản của bạn để tiếp tục</p>
             </div>
+
+            <c:if test="${not empty message}">
+                <div class="alert alert-success" role="alert"><c:out value="${message}"/></div>
+            </c:if>
+
+            <c:if test="${not empty oauthError}">
+                <div class="alert alert-danger" role="alert"><c:out value="${oauthError}"/></div>
+            </c:if>
 
             <form id="loginForm" class="auth-form" action="${pageContext.request.contextPath}/login" method="post">
                 <div class="auth-field">
