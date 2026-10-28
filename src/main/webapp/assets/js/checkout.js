@@ -9,7 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var paymentCards = document.querySelectorAll("[data-payment-card]");
     var cashBox = document.getElementById("cashSkeletonBox");
-    var paypalBox = document.getElementById("paypalSkeletonBox");
+    var vnpayBox = document.getElementById("vnpayBox");
+    var bankTransferBox = document.getElementById("bankTransferBox");
     var summaryPaymentLabel = document.getElementById("summaryPaymentLabel");
     var errorEl = document.getElementById("checkoutErrorMsg");
     var payBtn = document.getElementById("payOrderBtn");
@@ -18,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var successOrderCode = document.getElementById("successOrderCode");
     var successPaymentMethod = document.getElementById("successPaymentMethod");
     var successOrderTotal = document.getElementById("successOrderTotal");
+    var successViewInvoiceBtn = document.getElementById("successViewInvoiceBtn");
 
     function formatVnd(amount) {
         return Number(amount || 0).toLocaleString("vi-VN") + "đ";
@@ -47,14 +49,18 @@ document.addEventListener("DOMContentLoaded", function () {
             paymentCards.forEach(function (c) {
                 c.classList.toggle("is-selected", c === card);
             });
-            if (cashBox) {
-                cashBox.hidden = method !== "CASH";
-            }
-            if (paypalBox) {
-                paypalBox.hidden = method !== "PAYPAL";
-            }
+            if (cashBox) cashBox.hidden = method !== "CASH";
+            if (vnpayBox) vnpayBox.hidden = method !== "VNPAY";
+            if (bankTransferBox) bankTransferBox.hidden = method !== "BANK_TRANSFER";
+
             if (summaryPaymentLabel) {
-                summaryPaymentLabel.textContent = method === "PAYPAL" ? "PayPal" : "Tiền mặt (Cash)";
+                if (method === "VNPAY") {
+                    summaryPaymentLabel.textContent = "Cổng VNPay";
+                } else if (method === "BANK_TRANSFER") {
+                    summaryPaymentLabel.textContent = "Chuyển khoản VietQR";
+                } else {
+                    summaryPaymentLabel.textContent = "Tiền mặt (COD)";
+                }
             }
         });
     });
@@ -88,11 +94,16 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             payBtn.disabled = true;
+            payBtn.textContent = "Đang xử lý đơn hàng...";
+
             var formData = new FormData(form);
             var body = new URLSearchParams();
             formData.forEach(function (val, key) {
                 body.append(key, val);
             });
+
+            var selectedMethod = form.querySelector('input[name="paymentMethod"]:checked');
+            var methodVal = selectedMethod ? selectedMethod.value : "CASH";
 
             fetch(contextPath + "/checkout", {
                 method: "POST",
@@ -109,6 +120,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 })
                 .then(function (result) {
                     if (result.data && result.data.success) {
+                        // If VNPay, redirect directly to VNPay portal
+                        if (methodVal === "VNPAY" && result.data.redirectUrl) {
+                            window.location.href = result.data.redirectUrl;
+                            return;
+                        }
+
+                        // Otherwise show success modal with invoice link
                         if (successOrderCode) {
                             successOrderCode.textContent = result.data.orderCode || "---";
                         }
@@ -117,6 +135,9 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
                         if (successOrderTotal) {
                             successOrderTotal.textContent = formatVnd(result.data.total);
+                        }
+                        if (successViewInvoiceBtn && result.data.redirectUrl) {
+                            successViewInvoiceBtn.href = result.data.redirectUrl;
                         }
                         if (successModal) {
                             successModal.hidden = false;
@@ -127,6 +148,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             errorEl.hidden = false;
                         }
                         payBtn.disabled = false;
+                        payBtn.textContent = "Đặt hàng ngay";
                     }
                 })
                 .catch(function () {
@@ -135,6 +157,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         errorEl.hidden = false;
                     }
                     payBtn.disabled = false;
+                    payBtn.textContent = "Đặt hàng ngay";
                 });
         });
     }
