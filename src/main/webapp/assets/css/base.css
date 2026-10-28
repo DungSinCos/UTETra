@@ -162,3 +162,32 @@ img {
     color: var(--ut-text);
     background-color: var(--ut-cream);
 }
+
+
+/* ============================================================
+   Bootstrap Button & Brand Theme Synchronization
+   ============================================================ */
+.btn-primary {
+    background-color: var(--ut-primary) !important;
+    border-color: var(--ut-primary) !important;
+    color: var(--ut-white) !important;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+    background-color: var(--ut-primary-dark) !important;
+    border-color: var(--ut-primary-dark) !important;
+    color: var(--ut-white) !important;
+    box-shadow: 0 4px 12px rgba(123, 74, 43, 0.25) !important;
+}
+
+.btn-outline-primary {
+    color: var(--ut-primary) !important;
+    border-color: var(--ut-primary) !important;
+    background-color: transparent !important;
+}
+
+.btn-outline-primary:hover, .btn-outline-primary:focus, .btn-outline-primary:active {
+    background-color: var(--ut-primary) !important;
+    border-color: var(--ut-primary) !important;
+    color: var(--ut-white) !important;
+}

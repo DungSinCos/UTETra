@@ -9,7 +9,13 @@ import java.util.List;
 
 public interface BranchRepository extends JpaRepository<Branch, Long> {
 
+    List<Branch> findAllByOrderByIdAsc();
+
     List<Branch> findByActiveTrueOrderByIdAsc();
+
+    boolean existsByCodeIgnoreCase(String code);
+
+    boolean existsByCodeIgnoreCaseAndIdNot(String code, Long id);
 
     @Query(value = "SELECT b.branch_id FROM branch_product_status b " +
                    "WHERE b.product_id = :productId AND b.is_available = TRUE", nativeQuery = true)

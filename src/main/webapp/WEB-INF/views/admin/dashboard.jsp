@@ -151,7 +151,14 @@
                 </div>
             </a>
         </div>
-        <%-- Add one link card per new admin module here (orders, users, branches...) --%>
+        <div class="col-md-6 col-lg-4">
+            <a class="card shadow-sm h-100 text-decoration-none" href="${pageContext.request.contextPath}/admin/branches">
+                <div class="card-body">
+                    <div class="fw-semibold">Quản lý chi nhánh</div>
+                    <div class="text-muted small">Xem danh sách, thêm chi nhánh mới, sửa thông tin và bật/tắt hoạt động.</div>
+                </div>
+            </a>
+        </div>
     </div>
 </section>
 </body>
