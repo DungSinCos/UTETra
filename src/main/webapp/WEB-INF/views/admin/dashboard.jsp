@@ -40,70 +40,75 @@
                 </div>
             </div>
             <div class="col-6 col-lg-3">
-                <div class="admin-card admin-card--highlight">
-                    <div class="admin-card__label">Đang bán</div>
+                <div class="admin-card" style="border-color:#86efac;">
+                    <div class="admin-card__label">Đang mở bán</div>
                     <div class="admin-card__value admin-card__value--success"><c:out value="${activeProducts}"/></div>
                 </div>
             </div>
             <div class="col-6 col-lg-3">
                 <div class="admin-card">
-                    <div class="admin-card__label">Đã ẩn khỏi menu</div>
-                    <div class="admin-card__value admin-card__value--muted"><c:out value="${hiddenProducts}"/></div>
+                    <div class="admin-card__label">Đã tạm ẩn</div>
+                    <div class="admin-card__value" style="color:#94a3b8;"><c:out value="${hiddenProducts}"/></div>
                 </div>
             </div>
             <div class="col-6 col-lg-3">
-                <div class="admin-card">
-                    <div class="admin-card__label">Món nổi bật (đang bán)</div>
-                    <div class="admin-card__value admin-card__value--primary"><c:out value="${featuredProducts}"/></div>
+                <div class="admin-card" style="border-color:#fde047;">
+                    <div class="admin-card__label">Nổi bật (Best seller)</div>
+                    <div class="admin-card__value admin-card__value--accent"><c:out value="${featuredProducts}"/></div>
                 </div>
             </div>
         </div>
 
-        <%-- Section 2: Đơn hàng & Doanh thu --%>
-        <div class="admin-section-heading">
-            <h2 class="admin-section-title mb-0">Đơn hàng &amp; Doanh thu</h2>
-            <form class="admin-filter-bar" method="get" action="${pageContext.request.contextPath}/admin/dashboard">
-                <div class="admin-filter-group">
-                    <label class="admin-filter-label" for="from">Từ ngày</label>
-                    <input class="admin-filter-input" type="date" id="from" name="from" value="${from}" required>
+        <%-- Section 2: Thống kê Đơn hàng & Doanh thu --%>
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+            <h2 class="admin-section-title mb-0">Báo cáo Đơn hàng &amp; Doanh thu</h2>
+            <form class="d-flex flex-wrap align-items-center gap-2" method="get"
+                  action="${pageContext.request.contextPath}/admin/dashboard">
+                <div class="d-flex align-items-center gap-1">
+                    <label class="small text-muted fw-bold" for="from">Từ:</label>
+                    <input class="admin-input-date" type="date" id="from" name="from" value="${from}" required>
                 </div>
-                <div class="admin-filter-group">
-                    <label class="admin-filter-label" for="to">Đến ngày</label>
-                    <input class="admin-filter-input" type="date" id="to" name="to" value="${to}" required>
+                <div class="d-flex align-items-center gap-1">
+                    <label class="small text-muted fw-bold" for="to">Đến:</label>
+                    <input class="admin-input-date" type="date" id="to" name="to" value="${to}" required>
                 </div>
-                <button class="admin-btn admin-btn--filter" type="submit">Lọc</button>
+                <button class="admin-btn admin-btn--outline" style="padding:6px 18px;font-size:0.88rem;" type="submit">
+                    Lọc dữ liệu
+                </button>
             </form>
         </div>
 
         <c:if test="${not empty dateError}">
-            <div class="alert alert-danger mb-4"><c:out value="${dateError}"/></div>
+            <div class="alert alert-danger" style="background:#fee2e2;color:#b91c1c;border-radius:12px;margin-bottom:1.5rem;font-weight:600;">
+                &#9888; <c:out value="${dateError}"/>
+            </div>
         </c:if>
 
         <div class="row g-3 mb-5">
-            <div class="col-md-4">
+            <div class="col-6 col-lg-4">
                 <div class="admin-card">
-                    <div class="admin-card__label">Đơn trong khoảng lọc</div>
-                    <div class="admin-card__value admin-card__value--primary"><c:out value="${orderSummary.totalOrders}"/></div>
+                    <div class="admin-card__label">Số đơn trong kỳ</div>
+                    <div class="admin-card__value"><c:out value="${orderSummary.totalOrders}"/></div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="admin-card admin-card--warning">
-                    <div class="admin-card__label">Đơn đang chờ xử lý</div>
+            <div class="col-6 col-lg-4">
+                <div class="admin-card" style="border-color:#fed7aa;">
+                    <div class="admin-card__label">Đơn chờ xử lý</div>
                     <div class="admin-card__value admin-card__value--warning"><c:out value="${orderSummary.pendingOrders}"/></div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="admin-card admin-card--revenue">
+            <div class="col-12 col-lg-4">
+                <div class="admin-card" style="border-color:#86efac;background:linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);">
                     <div class="admin-card__label">Doanh thu đã thanh toán</div>
-                    <div class="admin-card__value admin-card__value--revenue">
+                    <div class="admin-card__value admin-card__value--success" style="font-size:1.9rem;">
                         <fmt:formatNumber value="${orderSummary.paidRevenue}" type="number" maxFractionDigits="0"/> đ
                     </div>
                 </div>
             </div>
         </div>
 
-        <%-- Section 3: Truy cập nhanh --%>
-        <h2 class="admin-section-title">Truy cập nhanh</h2>
+        <%-- Section 3: Lối tắt quản lý (Truy cập nhanh) --%>
+        <h2 class="admin-section-title">Phím tắt chức năng</h2>
         <div class="row g-3">
             <div class="col-md-6 col-lg-4">
                 <a class="admin-action-card" href="${pageContext.request.contextPath}/admin/orders">
