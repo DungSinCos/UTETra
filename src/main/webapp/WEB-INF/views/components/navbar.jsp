@@ -25,11 +25,19 @@
             <div class="nav-actions">
                 <c:choose>
                     <c:when test="${not empty currentUser}">
-                        <a class="action-btn action-btn--ghost" href="${pageContext.request.contextPath}/account/profile">Tài khoản</a>
-                        <span class="nav-user-greeting">
-                            Xin chào, <strong><c:out value="${currentUserName}"/></strong>
-                        </span>
-                        <a class="action-btn action-btn--ghost" href="${pageContext.request.contextPath}/logout">Đăng xuất</a>
+                        <div class="dropdown profile-dropdown">
+                            <button class="action-btn action-btn--solid dropdown-toggle profile-dropdown-toggle"
+                                    type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span>Xin chào, <strong><c:out value="${currentUserName}"/></strong></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end profile-dropdown-menu" aria-labelledby="profileDropdown">
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/account/profile">Thông tin cá nhân</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/account/orders">Lịch sử mua hàng</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/account/change-password">Đổi mật khẩu</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item profile-dropdown-logout" href="${pageContext.request.contextPath}/logout">Đăng xuất</a></li>
+                            </ul>
+                        </div>
                     </c:when>
                     <c:otherwise>
                         <a class="action-btn action-btn--ghost" href="${pageContext.request.contextPath}/login">Đăng nhập</a>

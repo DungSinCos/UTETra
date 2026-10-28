@@ -8,7 +8,10 @@
 <section class="container py-5">
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
         <h1 class="mb-0">Lịch sử đơn hàng</h1>
-        <a class="btn btn-outline-secondary" href="${pageContext.request.contextPath}/account/profile">Về tài khoản</a>
+        <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-outline-secondary" href="${pageContext.request.contextPath}/account/profile">Về tài khoản</a>
+            <a class="btn btn-outline-secondary" href="${pageContext.request.contextPath}/">Về trang chủ</a>
+        </div>
     </div>
     <div class="table-responsive">
         <table class="table table-hover align-middle">

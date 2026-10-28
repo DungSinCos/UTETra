@@ -5,7 +5,10 @@
 <head><title>Tài khoản của tôi</title></head>
 <body>
 <section class="container py-5" style="max-width:760px">
-    <h1 class="mb-4">Tài khoản của tôi</h1>
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+        <h1 class="mb-0">Tài khoản của tôi</h1>
+        <a class="btn btn-outline-secondary" href="${pageContext.request.contextPath}/">Về trang chủ</a>
+    </div>
     <c:if test="${not empty message}"><div class="alert alert-success"><c:out value="${message}"/></div></c:if>
     <c:if test="${not empty error}"><div class="alert alert-danger"><c:out value="${error}"/></div></c:if>
 
